@@ -1,7 +1,7 @@
 import { createStore as _createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 
-export default function createStore(reducers, history, data) {
+export default function createStore({reducers, history, data, isDevelopment}) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history);
 
@@ -10,13 +10,13 @@ export default function createStore(reducers, history, data) {
   let finalCreateStore;
   finalCreateStore = applyMiddleware(...middleware)(_createStore);
 
-  const reducer = require('./koiki-reducer')(reducers);
+  const reducer = require('./reducer')(reducers);
   const store = finalCreateStore(reducer, data);
 
 
-  if (__DEVELOPMENT__ && module.hot) {
-    module.hot.accept('./koiki-reducer', () => {
-      store.replaceReducer(require('./koiki-reducer')(reducers));
+  if (isDevelopment && module.hot) {
+    module.hot.accept('./reducer', () => {
+      store.replaceReducer(require('./reducer')(reducers));
     });
   }
 

@@ -6,16 +6,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
-import createStore from './koiki-create';
-import ApiClient from 'promise-apiclient';
+import createStore from './create';
+import ApiClient from './apiclient';
 import {Provider} from 'react-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
 import Fetcher from 'redux-fetch-dispatcher';
 
-export default function client({urls, reducers, routes}) {
+export default function client({urls, reducers, routes, isDevelopment}) {
   const history = useScroll(() => browserHistory)();
   const dest = document.getElementById('content');
-  const store = createStore(reducers, history, window.__data);
+  const store = createStore({reducers, history, data: window.__data, isDevelopment});
   const fetcher = new Fetcher({
     dispatch: store.dispatch,
     client: new ApiClient(),

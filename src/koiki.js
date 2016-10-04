@@ -1,3 +1,4 @@
 
-export client from './koiki-client';
-export server from './koiki-server';
+export client from './client';
+export server from './server';
+export ApiClient from './apiclient';

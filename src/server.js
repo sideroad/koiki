@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import createStore from './koiki-create';
-import {set} from './koiki-i18n';
-import ApiClient from 'promise-apiclient';
+import createStore from './create';
+import {set} from './i18n';
+import ApiClient from './apiclient';
 import Fetcher from 'redux-fetch-dispatcher';
 import { match } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import {Provider} from 'react-redux';
 
-export default function server({app, uris, urls, i18n, reducers, Html, routes, handlers}) {
+export default function server({app, uris, urls, domain, i18n, reducers, Html, routes, handlers, isDevelopment}) {
 
-  app.use(uris.apps.apps, (req, res) => {
+  app.use(uris.root, (req, res) => {
     if (__DEVELOPMENT__) {
       // Do not cache webpack stats: the script file would change since
       // hot module replacement is enabled in the development env
@@ -19,12 +19,12 @@ export default function server({app, uris, urls, i18n, reducers, Html, routes, h
     }
     const client = new ApiClient({
       cookie: req.get('cookie'),
-      origin: uris.base,
-      referer: uris.base
+      origin: domain,
+      referer: domain
     });
     const history = createHistory(req.originalUrl);
 
-    const store = createStore(reducers, history);
+    const store = createStore({reducers, history, isDevelopment});
     store.dispatch(set( i18n[req.params.lang] ));
 
     const fetcher = new Fetcher({
@@ -47,7 +47,7 @@ export default function server({app, uris, urls, i18n, reducers, Html, routes, h
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
-        handers.error(error);
+        handlers.error(error);
         res.status(500);
         hydrateOnClient();
       } else if (renderProps) {
