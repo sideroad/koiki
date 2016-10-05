@@ -4,13 +4,14 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, browserHistory } from 'react-router';
+import { Router, browserHistory, Route } from 'react-router';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import createStore from './create';
 import ApiClient from './apiclient';
 import {Provider} from 'react-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
-import Fetcher from 'redux-fetch-dispatcher';
+import Fetcher from './fetcher';
+import App from './App';
 
 export default function client({urls, reducers, routes, isDevelopment}) {
   const history = useScroll(() => browserHistory)();
@@ -23,10 +24,16 @@ export default function client({urls, reducers, routes, isDevelopment}) {
   });
 
   const component = (
-    <Router render={(props) =>
-          <ReduxAsyncConnect {...props} helpers={{fetcher}} filter={item => !item.deferred} />
-        } history={history}>
-      {routes(store)}
+    <Router
+      render={(props) =>
+        <ReduxAsyncConnect {...props} helpers={{fetcher}} filter={item => !item.deferred} />
+      } history={history}>
+      <Route
+        component={App}
+        urls={urls}
+      >
+        {routes(store)}
+      </Route>
     </Router>
   );
 

@@ -19,6 +19,6 @@ export default function reducer(state = initialState, action = {}) {
 export function set( i18n ) {
   return {
     type: SET,
-    msg: i18n.msg
+    msg: i18n
   };
 }

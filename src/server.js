@@ -3,16 +3,41 @@ import ReactDOM from 'react-dom/server';
 import createStore from './create';
 import {set} from './i18n';
 import ApiClient from './apiclient';
-import Fetcher from 'redux-fetch-dispatcher';
-import { match } from 'react-router';
+import Fetcher from './fetcher';
+import { Route, match } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import {Provider} from 'react-redux';
+import recursive from 'recursive-readdir-sync';
+import PropertiesReader from 'properties-reader';
+import Html from './Html';
+import App from './App';
 
-export default function server({app, uris, urls, domain, i18n, reducers, Html, routes, handlers, isDevelopment}) {
+const loadi18n = (dir, i18n) => {
+  const path = require('path');
+  const files = recursive( dir );
+  files.map(file => {
+    console.log('### loading lang files');
+    console.log(file);
+    const properties = PropertiesReader(file);
+    const lang = path.basename(file, '.properties');
+    i18n[lang] = properties.getAllProperties();
+  });
+  console.log(i18n);
+};
 
-  app.use(uris.root, (req, res) => {
-    if (__DEVELOPMENT__) {
+export default function server({app, path, origin, urls, domain, i18ndir, reducers, routes, handlers, isDevelopment}) {
+  const i18n = {};
+  loadi18n(i18ndir, i18n);
+
+  if (isDevelopment && module.hot) {
+    module.hot.accept(i18ndir, () => {
+      loadi18n(i18ndir, i18n);
+    });
+  }
+
+  app.use(path, (req, res) => {
+    if (isDevelopment) {
       // Do not cache webpack stats: the script file would change since
       // hot module replacement is enabled in the development env
       webpackIsomorphicTools.refresh();
@@ -43,7 +68,17 @@ export default function server({app, uris, urls, domain, i18n, reducers, Html, r
       return;
     }
 
-    match({ history, routes: routes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+    match({
+      history,
+      routes: <Route
+                urls={urls}
+                origin={origin}
+                component={App}
+              >
+                {routes(store)}
+              </Route>,
+      location: req.originalUrl
+    }, (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
