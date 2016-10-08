@@ -39,8 +39,8 @@ export default class App extends Component {
         dispatch: this.props.dispatch,
         client: new ApiClient(req ? {
           cookie: req.get('cookie'),
-          origin: this.props.route.base,
-          referer: this.props.route.base
+          origin: this.props.route.domain,
+          referer: this.props.route.domain
         } : undefined)
       }),
       lang: this.props.params.lang,

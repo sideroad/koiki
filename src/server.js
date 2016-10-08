@@ -4,6 +4,7 @@ import createStore from './create';
 import {set} from './i18n';
 import ApiClient from './apiclient';
 import Fetcher from './fetcher';
+import stringify from './stringify';
 import { Route, match } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
@@ -26,9 +27,23 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, origin, urls, domain, i18ndir, reducers, routes, handlers, isDevelopment}) {
+export default function server({app, path, urls, domain, i18ndir, reducers, routes, handlers, isDevelopment}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
+
+  app.get('*', (req, res, next)=>{
+    if ( !isDevelopment && req.headers['x-forwarded-proto'] !== 'https') {
+      res.redirect('https://' + domain + req.url);
+    } else {
+      next();
+    }
+  });
+
+  app.get('/', (req, res)=>{
+    const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';
+    console.log(lang, req.headers['accept-language']);
+    res.redirect(stringify( path, {lang} ));
+  });
 
   app.use(path, (req, res) => {
     if (isDevelopment) {
@@ -66,7 +81,7 @@ export default function server({app, path, origin, urls, domain, i18ndir, reduce
       history,
       routes: <Route
                 urls={urls}
-                origin={origin}
+                domain={domain}
                 component={App}
               >
                 {routes(store)}
