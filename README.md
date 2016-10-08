@@ -16,7 +16,7 @@ npm i --save koiki
 |isDevelopment |Boolean          |Development Flag               | client / server |        |
 |app           |Object           |Instance of express            | server          |        |
 |path          |String           |Root URI                       | server          |        |
-|domain        |String           |App domain                     | server          |        |
+|origin        |String           |App origin URL                 | server          |        |
 |i18ndir       |String           |i18n properties directory path | server          |        |
 |handlers      |Object           |-                              | server          |        |
 |handlers.error|Function         |Error callback                 | server          |        |

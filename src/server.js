@@ -27,13 +27,13 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, domain, i18ndir, reducers, routes, handlers, isDevelopment}) {
+export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, isDevelopment}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
   app.get('*', (req, res, next)=>{
     if ( !isDevelopment && req.headers['x-forwarded-proto'] !== 'https') {
-      res.redirect('https://' + domain + req.url);
+      res.redirect(origin + req.url);
     } else {
       next();
     }
@@ -53,8 +53,8 @@ export default function server({app, path, urls, domain, i18ndir, reducers, rout
     }
     const client = new ApiClient({
       cookie: req.get('cookie'),
-      origin: domain,
-      referer: domain
+      origin: origin,
+      referer: origin
     });
     const history = createHistory(req.originalUrl);
 
@@ -81,7 +81,7 @@ export default function server({app, path, urls, domain, i18ndir, reducers, rout
       history,
       routes: <Route
                 urls={urls}
-                domain={domain}
+                origin={origin}
                 component={App}
               >
                 {routes(store)}
