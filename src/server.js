@@ -30,12 +30,6 @@ export default function server({app, path, origin, urls, domain, i18ndir, reduce
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
-  if (isDevelopment && module.hot) {
-    module.hot.accept(i18ndir, () => {
-      loadi18n(i18ndir, i18n);
-    });
-  }
-
   app.use(path, (req, res) => {
     if (isDevelopment) {
       // Do not cache webpack stats: the script file would change since
