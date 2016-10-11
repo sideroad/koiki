@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "1.5.3",
+  "version": "2.1.1",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -35,11 +35,11 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.16.3",
     "properties-reader": "0.0.15",
-    "react": "^0.14.8",
-    "react-dom": "^0.14.8",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "react-helmet": "^3.1.0",
     "react-redux": "^4.0.0",
-    "react-router": "^2.0.0",
+    "react-router": "^2.8.1",
     "react-router-redux": "^4.0.4",
     "recursive-readdir-sync": "^1.0.6",
     "redux": "^3.0.4",

@@ -27,7 +27,7 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, isDevelopment}) {
+export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
@@ -69,7 +69,14 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
 
     function hydrateOnClient() {
       res.send('<!doctype html>\n' +
-        ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store}/>));
+        ReactDOM.renderToString(
+          <Html
+            assets={webpackIsomorphicTools.assets()}
+            store={store}
+            statics={statics}
+          />
+        )
+      );
     }
 
     if (__DISABLE_SSR__) {
@@ -107,7 +114,13 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
           global.navigator = {userAgent: req.headers['user-agent']};
 
           res.send('<!doctype html>\n' +
-            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>));
+            ReactDOM.renderToString(
+              <Html
+                assets={webpackIsomorphicTools.assets()}
+                component={component}
+                store={store}
+                statics={statics}
+              />));
         });
       } else {
         res.status(404).send('Not found');
