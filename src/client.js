@@ -13,10 +13,10 @@ import { ReduxAsyncConnect } from 'redux-connect';
 import Fetcher from './fetcher';
 import App from './App';
 
-export default function client({urls, reducers, routes, isDevelopment}) {
+export default function client({urls, reducers, routes}) {
   const history = useScroll(() => browserHistory)();
   const dest = document.getElementById('content');
-  const store = createStore({reducers, history, data: window.__data, isDevelopment});
+  const store = createStore({reducers, history, data: window.__data});
   const fetcher = new Fetcher({
     dispatch: store.dispatch,
     client: new ApiClient(),

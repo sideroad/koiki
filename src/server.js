@@ -58,7 +58,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
     });
     const history = createHistory(req.originalUrl);
 
-    const store = createStore({reducers, history, isDevelopment});
+    const store = createStore({reducers, history});
     store.dispatch(set( i18n[req.params.lang] ));
 
     const fetcher = new Fetcher({

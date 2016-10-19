@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ApiClient from './apiclient';
-import Fetcher from 'redux-fetch-dispatcher';
+import Fetcher from './fetcher';
 import { connect } from 'react-redux';
 
 @connect(
