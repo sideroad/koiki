@@ -1,5 +1,5 @@
 
-const exec = ({dispatch, client, url, method, values, start, success, fail}) => {
+const exec = ({dispatch, client, url, method, values, start, success, fail, after = (_values, res) => new Promise(resolve => resolve(res))}) => {
   dispatch(start(fetch.values));
   return client
           .fetchJSON({
@@ -9,8 +9,12 @@ const exec = ({dispatch, client, url, method, values, start, success, fail}) => 
           })
           .then(
             res => {
-              dispatch(success(res));
-              return res;
+              return after(values, res).then(
+                converted => {
+                  dispatch(success(converted));
+                  return converted;
+                }
+              );
             },
             err => {
               dispatch(fail(err));
@@ -33,16 +37,19 @@ export default class fetcher {
             client,
             url: urls[resource][action].url,
             method: urls[resource][action].method,
+            after: urls[resource][action].after,
             values: _values,
             start: () => ({
-              _values,
+              values: _values,
               type: resource + '/' + action.toUpperCase() + '_START'
             }),
             success: (res) => ({
+              values: _values,
               res,
               type: resource + '/' + action.toUpperCase() + '_SUCCESS'
             }),
             fail: (err) => ({
+              values: _values,
               err,
               type: resource + '/' + action.toUpperCase() + '_FAIL'
             })

@@ -13,6 +13,7 @@ import recursive from 'recursive-readdir-sync';
 import PropertiesReader from 'properties-reader';
 import Html from './Html';
 import App from './App';
+import CookieDough from 'cookie-dough';
 
 const loadi18n = (dir, i18n) => {
   const path = require('path');
@@ -45,7 +46,11 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
     res.redirect(stringify( path, {lang} ));
   });
 
-  app.use(path, (req, res) => {
+  app.use(path, (req, res, next) => {
+    if (!i18n[req.params.lang]) {
+      next();
+      return;
+    }
     if (isDevelopment) {
       // Do not cache webpack stats: the script file would change since
       // hot module replacement is enabled in the development env
@@ -56,6 +61,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
       origin: origin,
       referer: origin
     });
+    const cookie = new CookieDough(req);
     const history = createHistory(req.originalUrl);
 
     const store = createStore({reducers, history});
@@ -90,8 +96,9 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
                 urls={urls}
                 origin={origin}
                 component={App}
+                cookie={cookie}
               >
-                {routes(store)}
+                {routes(store, cookie)}
               </Route>,
       location: req.originalUrl
     }, (error, redirectLocation, renderProps) => {
@@ -102,7 +109,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
         res.status(500);
         hydrateOnClient();
       } else if (renderProps) {
-        loadOnServer({...renderProps, store, helpers: {fetcher}}).then(() => {
+        loadOnServer({...renderProps, store, cookie, helpers: {fetcher}}).then(() => {
           const component = (
             <Provider store={store} key="provider">
               <ReduxAsyncConnect {...renderProps} store={store} />

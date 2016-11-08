@@ -12,6 +12,7 @@ import {Provider} from 'react-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
 import Fetcher from './fetcher';
 import App from './App';
+import CookieDough from 'cookie-dough';
 
 export default function client({urls, reducers, routes}) {
   const history = useScroll(() => browserHistory)();
@@ -22,17 +23,19 @@ export default function client({urls, reducers, routes}) {
     client: new ApiClient(),
     urls
   });
+  const cookie = CookieDough();
 
   const component = (
     <Router
       render={(props) =>
-        <ReduxAsyncConnect {...props} helpers={{fetcher}} filter={item => !item.deferred} />
+        <ReduxAsyncConnect {...props} cookie={cookie} helpers={{fetcher}} filter={item => !item.deferred} />
       } history={history}>
       <Route
         component={App}
         urls={urls}
+        cookie={cookie}
       >
-        {routes(store)}
+        {routes(store, cookie)}
       </Route>
     </Router>
   );
