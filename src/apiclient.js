@@ -18,54 +18,65 @@ const normalize = (_uri, params) => {
   return uri;
 };
 
-const getHeader = (_headers) => {
-  const headers = Object.assign({}, _headers);
+const getHeader = (_headers, defaultHeaders) => {
+  const headers = Object.assign({...defaultHeaders}, _headers);
 
   return {
     method: 'GET',
-    headers: headers
+    headers: headers,
+    mode: 'cors',
+    credentials: 'include'
   };
 };
 
-const postHeader = (values, _headers) => {
+const postHeader = (values, _headers, defaultHeaders) => {
   const headers = Object.assign({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    ...defaultHeaders
   }, _headers);
 
   return {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify( values )
+    body: JSON.stringify( values ),
+    mode: 'cors',
+    credentials: 'include'
   };
 };
 
-const patchHeader = (values, _headers) => {
+const patchHeader = (values, _headers, defaultHeaders) => {
   const headers = Object.assign({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    ...defaultHeaders
   }, _headers);
 
   return {
     method: 'PATCH',
     headers: headers,
-    body: JSON.stringify( values )
+    body: JSON.stringify( values ),
+    mode: 'cors',
+    credentials: 'include'
   };
 };
 
 
-const deleteHeader = (values, _headers) => {
+const deleteHeader = (values, _headers, defaultHeaders) => {
   const headers = Object.assign({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    ...defaultHeaders
   }, _headers);
 
   return {
     method: 'DELETE',
     headers: headers,
-    body: JSON.stringify( values )
+    body: JSON.stringify( values ),
+    mode: 'cors',
+    credentials: 'include'
   };
 };
 
 export default class ApiClient {
-  constructor(req, logger = (...args) => console.log(...args)) {
+  constructor(defaultHeaders = {}, logger = (...args) => console.log(...args)) {
 
     this.fetchJSON = ({url = '', method = 'GET', values = {}, headers }) => {
 
@@ -78,10 +89,10 @@ export default class ApiClient {
         const _url = normalize(url, _values) + (method === 'GET' ? '?' + string(_values) : '');
         logger('## fetch ', _url, method, _values);
 
-        fetch( _url, (method === 'GET' ? getHeader( headers ) :
-                     method === 'POST' ? postHeader( _values, headers ) :
-                     method === 'PATCH' ? patchHeader( _values, headers ) :
-                     method === 'DELETE' ? deleteHeader( _values, headers ) : ''))
+        fetch( _url, (method === 'GET' ? getHeader( headers, defaultHeaders ) :
+                     method === 'POST' ? postHeader( _values, headers, defaultHeaders ) :
+                     method === 'PATCH' ? patchHeader( _values, headers, defaultHeaders ) :
+                     method === 'DELETE' ? deleteHeader( _values, headers, defaultHeaders ) : ''))
                .then(res => {
                  if ( !res.ok ) {
                    res.json().then((json) => {
