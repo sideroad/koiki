@@ -1,11 +1,25 @@
 
-const exec = ({dispatch, client, url, method, values, start, success, fail, after = (_values, res) => new Promise(resolve => resolve(res))}) => {
+const exec = ({
+    dispatch,
+    client,
+    url,
+    method,
+    values,
+    start,
+    success,
+    fail,
+    mode,
+    credentials,
+    after = (_values, res) => new Promise(resolve => resolve(res))
+  }) => {
   dispatch(start(fetch.values));
   return client
           .fetchJSON({
             url,
             method,
-            values
+            values,
+            mode,
+            credentials
           })
           .then(
             res => {
@@ -38,6 +52,8 @@ export default class fetcher {
             url: urls[resource][action].url,
             method: urls[resource][action].method,
             after: urls[resource][action].after,
+            mode: urls[resource][action].mode,
+            credentials: urls[resource][action].credentials,
             values: _values,
             start: () => ({
               values: _values,
