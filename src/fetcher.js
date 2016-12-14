@@ -10,6 +10,7 @@ const exec = ({
     fail,
     mode,
     credentials,
+    headers,
     after = (_values, res) => new Promise(resolve => resolve(res))
   }) => {
   dispatch(start(fetch.values));
@@ -19,7 +20,8 @@ const exec = ({
             method,
             values,
             mode,
-            credentials
+            credentials,
+            headers
           })
           .then(
             res => {
@@ -44,7 +46,7 @@ export default class fetcher {
       this[resource] = {};
 
       Object.keys(urls[resource]).map(action => {
-        this[resource][action] = (values) => {
+        this[resource][action] = (values, options = {}) => {
           const _values = Object.assign( {}, urls[resource][action].defaults || {}, values);
           return exec({
             dispatch,
@@ -52,8 +54,9 @@ export default class fetcher {
             url: urls[resource][action].url,
             method: urls[resource][action].method,
             after: urls[resource][action].after,
-            mode: urls[resource][action].mode,
-            credentials: urls[resource][action].credentials,
+            mode: options.mode !== undefined ? options.mode : urls[resource][action].mode,
+            credentials: options.credentials !== undefined ? options.credentials : urls[resource][action].credentials,
+            headers: options.headers !== undefined ? options.headers : urls[resource][action].headers,
             values: _values,
             start: () => ({
               values: _values,
