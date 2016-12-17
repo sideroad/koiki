@@ -33,10 +33,14 @@ export default function proxy({
       }));
       Object.keys(customizer).some(
         (uri) => {
-          if (matcher(uri, keys).exec(req.originalUrl.split('?')[0])) {
-            customizerBefore = customizer[uri].before;
-            customizerAfter = customizer[uri].after;
-            customizerOverride = customizer[uri].override;
+          if (
+            matcher(uri, keys).exec(req.originalUrl.split('?')[0]) &&
+            customizer[uri] &&
+            customizer[uri][req.method]
+          ) {
+            customizerBefore = customizer[uri][req.method].before;
+            customizerAfter = customizer[uri][req.method].after;
+            customizerOverride = customizer[uri][req.method].override;
           }
         }
       );

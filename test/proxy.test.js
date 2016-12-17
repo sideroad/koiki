@@ -18,22 +18,26 @@ proxy({
   },
   customizer: {
     '/context/apis/koiki/hobbies': {
-      before: (url, options) => {
-        return [url + '?limit=7', options];
-      },
-      after: (json) => {
-        return {
-          ...json,
-          foo: 'bar'
-        };
+      GET: {
+        before: (url, options) => {
+          return [url + '?limit=7', options];
+        },
+        after: (json) => {
+          return {
+            ...json,
+            foo: 'bar'
+          };
+        }
       }
     },
     '/context/apis/koiki/colors': {
-      override: (req, res) => {
-        res.status(400).json({
-          url: req.originalUrl,
-          message: 'should be fail'
-        });
+      GET: {
+        override: (req, res) => {
+          res.status(400).json({
+            url: req.originalUrl,
+            message: 'should be fail'
+          });
+        }
       }
     }
   }
