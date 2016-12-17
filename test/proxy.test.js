@@ -27,6 +27,14 @@ proxy({
           foo: 'bar'
         };
       }
+    },
+    '/context/apis/koiki/colors': {
+      override: (req, res) => {
+        res.status(400).json({
+          url: req.originalUrl,
+          message: 'should be fail'
+        });
+      }
     }
   }
 });
@@ -48,6 +56,16 @@ describe('proxy', () => {
       .end((err, res) => {
         res.body.should.have.property('first', '/apis/koiki/hobbies?offset=0&limit=7');
         res.body.should.have.property('foo', 'bar');
+        done(err);
+      });
+  });
+  it('should proxy GET request with customizer override', (done) => {
+    request(app)
+      .get('/context/apis/koiki/colors')
+      .expect(400)
+      .end((err, res) => {
+        res.body.should.have.property('message', 'should be fail');
+        res.body.should.have.property('url', '/context/apis/koiki/colors');
         done(err);
       });
   });

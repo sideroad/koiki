@@ -24,6 +24,7 @@ export default function proxy({
     }];
     let customizerBefore;
     let customizerAfter;
+    let customizerOverride;
     if (customizer) {
       const keys = Object.keys(req.params).map(key => ({
         name: key,
@@ -32,28 +33,34 @@ export default function proxy({
       }));
       Object.keys(customizer).some(
         (uri) => {
-          if (matcher(uri, keys).exec(req.originalUrl)) {
+          if (matcher(uri, keys).exec(req.originalUrl.split('?')[0])) {
             customizerBefore = customizer[uri].before;
             customizerAfter = customizer[uri].after;
+            customizerOverride = customizer[uri].override;
           }
         }
       );
     }
 
-    options = customizerBefore ? customizerBefore(...options) : before(...options);
-    logger('# Proxing', ...options);
-    fetch(...options)
-      .then(
-        apiRes =>
-          apiRes
-            .json()
-            .then(
-              json => res.json(customizerAfter ? customizerAfter(json) : after(json)),
-              err => logger('#Parse Error ', err) || res.json(err)
-            ),
-        err => logger('#Fetch Error ', options, err) || res.json(err)
-      ).catch(
-        err => logger('#Unexpected Error ', err) || res.json(err)
-      );
+    if (customizerOverride) {
+      logger('# Proxing with override', url);
+      customizerOverride(req, res);
+    } else {
+      options = customizerBefore ? customizerBefore(...options) : before(...options);
+      logger('# Proxing', ...options);
+      fetch(...options)
+        .then(
+          apiRes =>
+            apiRes
+              .json()
+              .then(
+                json => res.json(customizerAfter ? customizerAfter(json) : after(json)),
+                err => logger('#Parse Error ', err) || res.json(err)
+              ),
+          err => logger('#Fetch Error ', options, err) || res.json(err)
+        ).catch(
+          err => logger('#Unexpected Error ', err) || res.json(err)
+        );
+    }
   });
 }
