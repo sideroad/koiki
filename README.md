@@ -8,6 +8,7 @@ npm i --save koiki
 
 ## Usage
 
+### koiki.server / koiki.client
 |Parameter     |Type             |Meaning                        |Place to specify |Remark  |
 |:-------------|:----------------|:------------------------------|:----------------|:-------|
 |urls          |Object           |Resource URLs                  | client / server |        |
@@ -20,3 +21,5 @@ npm i --save koiki
 |i18ndir       |String           |i18n properties directory path | server          |        |
 |handlers      |Object           |-                              | server          |        |
 |handlers.error|Function         |Error callback                 | server          |        |
+
+### koiki.fetcher

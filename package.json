@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -12,9 +12,9 @@
   ],
   "scripts": {
     "build": "babel src --out-dir lib",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha --timeout 20000 --compilers js:babel-register --recursive $(find test -name '*.test.js')",
     "lint": "eslint src",
-    "pub": "rm lib/* && npm run build && npm run lint && npm publish ."
+    "pub": "rm lib/* && npm run build && npm run lint && npm test && npm publish ."
   },
   "author": "sideroad",
   "license": "MIT",
@@ -35,6 +35,7 @@
     "cookie-dough": "^0.1.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.16.3",
+    "path-to-regexp": "^1.7.0",
     "properties-reader": "0.0.15",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -52,16 +53,21 @@
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-eslint": "^5.0.0-beta6",
+    "babel-plugin-react-transform": "^2.0.0",
+    "babel-plugin-typecheck": "^3.6.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-power-assert": "^1.0.0",
+    "babel-register": "^6.14.0",
+    "body-parser": "^1.15.2",
     "eslint": "1.10.3",
     "eslint-config-airbnb": "0.1.0",
     "eslint-loader": "^1.0.0",
     "eslint-plugin-import": "^0.8.0",
     "eslint-plugin-react": "^3.5.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-power-assert": "^1.0.0",
-    "babel-register": "^6.14.0",
-    "babel-plugin-react-transform": "^2.0.0",
-    "babel-plugin-typecheck": "^3.6.0",
-    "power-assert": "^1.4.1"
+    "express": "^4.14.0",
+    "mocha": "^3.2.0",
+    "power-assert": "^1.4.1",
+    "should": "^11.1.2",
+    "supertest": "^2.0.1"
   }
 }
