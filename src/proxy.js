@@ -1,14 +1,38 @@
 import matcher from 'path-to-regexp';
 import {} from 'isomorphic-fetch';
 
+const fetcher = (options, res, after, logger) => {
+  logger('# Proxing', ...options);
+  fetch(...options)
+    .then(
+      apiRes =>
+        apiRes
+          .json()
+          .then(
+            (json) => new Promise((resolve) => {
+              after(json, _json => {
+                resolve(_json);
+              });
+            }),
+            err => logger('#Parse Error ', err) || res.json(err)
+          )
+          .then(
+            json => res.status(apiRes.status).json(json)
+          ),
+      err => logger('#Fetch Error ', options, err) || res.json(err)
+    ).catch(
+      err => logger('#Unexpected Error ', err) || res.json(err)
+    );
+};
+
 export default function proxy({
   app,
   protocol,
   host,
   prefix,
-  before = (...args) => args,
-  after = args => args,
   customizer,
+  before = (url, options, cb) => cb([url, options]),
+  after = (json, cb) => cb(json),
   logger = (...args) => console.log(...args)
 }) {
   app.use(`${prefix}/*`, (req, res) => {
@@ -50,21 +74,11 @@ export default function proxy({
       logger('# Proxing with override', url);
       customizerOverride(req, res);
     } else {
-      options = customizerBefore ? customizerBefore(...options) : before(...options);
-      logger('# Proxing', ...options);
-      fetch(...options)
-        .then(
-          apiRes =>
-            apiRes
-              .json()
-              .then(
-                json => res.json(customizerAfter ? customizerAfter(json) : after(json)),
-                err => logger('#Parse Error ', err) || res.json(err)
-              ),
-          err => logger('#Fetch Error ', options, err) || res.json(err)
-        ).catch(
-          err => logger('#Unexpected Error ', err) || res.json(err)
-        );
+      options = customizerBefore ?
+      customizerBefore(...options, fetchOptions =>
+        fetcher(fetchOptions, res, customizerAfter || after, logger))
+      : before(...options, fetchOptions =>
+        fetcher(fetchOptions, res, customizerAfter || after, logger));
     }
   });
 }

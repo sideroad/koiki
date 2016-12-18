@@ -107,7 +107,11 @@ export default class ApiClient {
                      reject({});
                    });
                  } else {
-                   resolve({});
+                   res.json().then((json) => {
+                     resolve(json);
+                   }, () => {
+                     resolve({});
+                   });
                  }
                }, (err)=>{
                  reject(err);

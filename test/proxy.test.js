@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import request from 'supertest';
+import { expect } from 'chai';
 import 'should';
 import proxy from '../src/proxy';
 
@@ -13,20 +14,20 @@ proxy({
   host: 'chaus.herokuapp.com',
   prefix: '/context',
   logger: () => {},
-  before: (url, options) => {
-    return [url + '?limit=5', options];
+  before: (url, options, cb) => {
+    cb([url + '?limit=5', options]);
   },
   customizer: {
     '/context/apis/koiki/hobbies': {
       GET: {
-        before: (url, options) => {
-          return [url + '?limit=7', options];
+        before: (url, options, cb) => {
+          cb([url + '?limit=7', options]);
         },
-        after: (json) => {
-          return {
+        after: (json, cb) => {
+          cb({
             ...json,
             foo: 'bar'
-          };
+          });
         }
       }
     },
@@ -70,6 +71,41 @@ describe('proxy', () => {
       .end((err, res) => {
         res.body.should.have.property('message', 'should be fail');
         res.body.should.have.property('url', '/context/apis/koiki/colors');
+        done(err);
+      });
+  });
+  it('should proxy POST request', (done) => {
+    request(app)
+      .post('/context/apis/koiki/people')
+      .send({
+        name: 'test',
+        age: 10
+      })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).to.deep.equal({});
+        done(err);
+      });
+  });
+  it('should faild proxy POST request', (done) => {
+    request(app)
+      .post('/context/apis/koiki/people')
+      .send({})
+      .expect(400)
+      .end((err, res) => {
+        expect(res.body).to.deep.equal({
+          name: 'Invalid value[undefined]',
+          age: 'Invalid value[undefined]'
+        });
+        done(err);
+      });
+  });
+  it('should proxy DELETE request', (done) => {
+    request(app)
+      .delete('/context/apis/koiki/people/test')
+      .expect(200)
+      .end((err, res) => {
+        console.log(res.body);
         done(err);
       });
   });
