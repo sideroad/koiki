@@ -81,9 +81,12 @@ describe('proxy', () => {
         name: 'test',
         age: 10
       })
-      .expect(200)
+      .expect(201)
       .end((err, res) => {
-        expect(res.body).to.deep.equal({});
+        expect(res.body).to.deep.equal({
+          id: 'test',
+          href: '/apis/koiki/people/test'
+        });
         done(err);
       });
   });
