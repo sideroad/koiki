@@ -14,6 +14,7 @@ import PropertiesReader from 'properties-reader';
 import Html from './Html';
 import App from './App';
 import CookieDough from 'cookie-dough';
+import { stringify as stringifyQs, parse } from 'qs'
 
 const loadi18n = (dir, i18n) => {
   const path = require('path');
@@ -63,6 +64,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
     });
     const cookie = new CookieDough(req);
     const history = createHistory(req.originalUrl);
+    const stringifyQuery = query => stringifyQs(query, { arrayFormat: 'brackets', encode: false });
 
     const store = createStore({reducers, history});
     store.dispatch(set( i18n[req.params.lang] ));
@@ -100,7 +102,8 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
               >
                 {routes(store, cookie)}
               </Route>,
-      location: req.originalUrl
+      location: req.originalUrl,
+      options: [stringifyQuery]
     }, (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
