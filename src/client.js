@@ -4,7 +4,8 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, browserHistory, Route } from 'react-router';
+import { Router, Route, useRouterHistory } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 import createStore from './create';
 import ApiClient from './apiclient';
@@ -13,9 +14,10 @@ import { ReduxAsyncConnect } from 'redux-connect';
 import Fetcher from './fetcher';
 import App from './App';
 import CookieDough from 'cookie-dough';
+import { stringify as stringifyQs, parse } from 'qs'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 export default function client({urls, reducers, routes}) {
-  const history = useScroll(() => browserHistory)();
   const dest = document.getElementById('content');
   const store = createStore({reducers, history, data: window.__data});
   const fetcher = new Fetcher({
@@ -25,11 +27,18 @@ export default function client({urls, reducers, routes}) {
   });
   const cookie = CookieDough();
 
+  const stringifyQuery = query => stringifyQs(query, { arrayFormat: 'brackets', encode: false });
+  const createScrollHistory = useScroll(createBrowserHistory);
+  const appHistory = useRouterHistory(createScrollHistory)({ parseQueryString: parse, stringifyQuery });
+  const history = syncHistoryWithStore(appHistory, store);
+
   const component = (
     <Router
       render={(props) =>
         <ReduxAsyncConnect {...props} cookie={cookie} helpers={{fetcher}} filter={item => !item.deferred} />
-      } history={history}>
+      }
+      history={history}
+    >
       <Route
         component={App}
         urls={urls}
