@@ -63,8 +63,11 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
       referer: origin
     });
     const cookie = new CookieDough(req);
-    const history = createHistory(req.originalUrl);
     const stringifyQuery = query => stringifyQs(query, { arrayFormat: 'brackets', encode: false });
+    const history = createHistory({
+      parseQueryString: parse,
+      stringifyQuery
+    });
 
     const store = createStore({reducers, history});
     store.dispatch(set( i18n[req.params.lang] ));
@@ -102,8 +105,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
               >
                 {routes(store, cookie)}
               </Route>,
-      location: req.originalUrl,
-      options: [stringifyQuery]
+      location: req.originalUrl
     }, (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
