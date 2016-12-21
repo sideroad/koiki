@@ -14,6 +14,7 @@ import PropertiesReader from 'properties-reader';
 import Html from './Html';
 import App from './App';
 import CookieDough from 'cookie-dough';
+import createRouterOpts from './createRouterOpts';
 
 const loadi18n = (dir, i18n) => {
   const path = require('path');
@@ -62,7 +63,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
       referer: origin
     });
     const cookie = new CookieDough(req);
-    const history = createHistory(req.originalUrl);
+    const history = createHistory(createRouterOpts());
 
     const store = createStore({reducers, history});
     store.dispatch(set( i18n[req.params.lang] ));
