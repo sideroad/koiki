@@ -14,7 +14,7 @@ import { ReduxAsyncConnect } from 'redux-connect';
 import Fetcher from './fetcher';
 import App from './App';
 import CookieDough from 'cookie-dough';
-import { stringify as stringifyQs, parse } from 'qs'
+import createRouterOpts from './createRouterOpts';
 import { syncHistoryWithStore } from 'react-router-redux'
 
 export default function client({urls, reducers, routes}) {
@@ -27,9 +27,8 @@ export default function client({urls, reducers, routes}) {
   });
   const cookie = CookieDough();
 
-  const stringifyQuery = query => stringifyQs(query, { arrayFormat: 'brackets', encode: false });
   const createScrollHistory = useScroll(createBrowserHistory);
-  const appHistory = useRouterHistory(createScrollHistory)({ parseQueryString: parse, stringifyQuery });
+  const appHistory = useRouterHistory(createScrollHistory)(createRouterOpts());
   const history = syncHistoryWithStore(appHistory, store);
 
   const component = (
