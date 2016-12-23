@@ -15,9 +15,11 @@ import Fetcher from './fetcher';
 import App from './App';
 import CookieDough from 'cookie-dough';
 import createRouterOpts from './createRouterOpts';
-import { syncHistoryWithStore } from 'react-router-redux'
 
 export default function client({urls, reducers, routes}) {
+  const createScrollHistory = useScroll(createBrowserHistory);
+  const history = useRouterHistory(createScrollHistory)(createRouterOpts());
+
   const dest = document.getElementById('content');
   const store = createStore({reducers, history, data: window.__data});
   const fetcher = new Fetcher({
@@ -26,10 +28,6 @@ export default function client({urls, reducers, routes}) {
     urls
   });
   const cookie = CookieDough();
-
-  const createScrollHistory = useScroll(createBrowserHistory);
-  const appHistory = useRouterHistory(createScrollHistory)(createRouterOpts());
-  const history = syncHistoryWithStore(appHistory, store);
 
   const component = (
     <Router
