@@ -16,7 +16,7 @@ import App from './App';
 import CookieDough from 'cookie-dough';
 import createRouterOpts from './createRouterOpts';
 
-export default function client({urls, reducers, routes, dest}) {
+export default function client({urls, reducers, routes, dest = document.getElementById('content')}) {
   const createScrollHistory = useScroll(createBrowserHistory);
   const history = useRouterHistory(createScrollHistory)(createRouterOpts());
 
@@ -49,12 +49,11 @@ export default function client({urls, reducers, routes, dest}) {
     <Provider store={store} key="provider">
       {component}
     </Provider>,
-    dest || document.getElementById('content')
+    dest
   );
 
   if (process.env.NODE_ENV !== 'production') {
     window.React = React; // enable debugger
-
     if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-react-checksum']) {
       console.error('Server-side React render was discarded. Make sure that your initial render does not contain any client-side code.');
     }
