@@ -11,7 +11,7 @@ const exec = ({
     mode,
     credentials,
     headers,
-    after = (_values, res) => new Promise(resolve => resolve(res))
+    after = (_values, res) => new Promise(resolve => resolve(res.body))
   }) => {
   dispatch(start(fetch.values));
   return client
