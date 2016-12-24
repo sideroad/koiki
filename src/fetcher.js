@@ -25,7 +25,7 @@ const exec = ({
           })
           .then(
             (res) => {
-              return after(values, res.body, res.res).then(
+              return after(values, res).then(
                 converted => {
                   dispatch(success(converted, res));
                   return Promise.resolve({

@@ -9,7 +9,12 @@ describe('client', () => {
         person: {
           gets: {
             method: 'GET',
-            url: 'https://chaus.herokuapp.com/apis/koiki/people'
+            url: 'https://chaus.herokuapp.com/apis/koiki/people',
+            after: (values, res) => {
+              expect(values).toMatchSnapshot();
+              expect(res.body).toMatchSnapshot();
+              return Promise.resolve(res.body);
+            }
           }
         }
       },

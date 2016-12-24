@@ -29,9 +29,11 @@ v4.0.0
 - fetcher callback object is deeper than before.
  - Before
    - `then` callback only get response JSON object.
+   - `after` callback only get response JSON object.
    - success dispatched callback has action.res from response JSON object.
  - After
    - `then` callback gets { body: response JSON object, res: fetch response object }
+   - `after` callback gets { body: response JSON object, res: fetch response object }
    - success dispatched callback has action.res from fetch response object.
    - success dispatched callback has action.body from response JSON object.
    - error dispatched callback has action.res from fetch response object.

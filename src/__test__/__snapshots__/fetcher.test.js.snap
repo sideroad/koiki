@@ -1,4 +1,40 @@
-exports[`client should be create app for client 1`] = `
+exports[`client should be create app for client 1`] = `Object {}`;
+
+exports[`client should be create app for client 2`] = `
+Object {
+  "first": "/apis/koiki/people?offset=0&limit=25",
+  "items": Array [
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/sideroad/hobbies",
+      },
+      "id": "sideroad",
+      "name": "sideroad",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:48.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/koiki/hobbies",
+      },
+      "id": "koiki",
+      "name": "koiki",
+      "updatedAt": "2016-10-15T04:42:48.000Z",
+    },
+  ],
+  "last": "/apis/koiki/people?offset=0&limit=25",
+  "limit": 25,
+  "next": null,
+  "offset": 0,
+  "prev": null,
+  "size": 2,
+}
+`;
+
+exports[`client should be create app for client 3`] = `
 Object {
   "first": "/apis/koiki/people?offset=0&limit=25",
   "items": Array [
