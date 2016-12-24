@@ -16,11 +16,10 @@ import App from './App';
 import CookieDough from 'cookie-dough';
 import createRouterOpts from './createRouterOpts';
 
-export default function client({urls, reducers, routes}) {
+export default function client({urls, reducers, routes, dest}) {
   const createScrollHistory = useScroll(createBrowserHistory);
   const history = useRouterHistory(createScrollHistory)(createRouterOpts());
 
-  const dest = document.getElementById('content');
   const store = createStore({reducers, history, data: window.__data});
   const fetcher = new Fetcher({
     dispatch: store.dispatch,
@@ -50,7 +49,7 @@ export default function client({urls, reducers, routes}) {
     <Provider store={store} key="provider">
       {component}
     </Provider>,
-    dest
+    dest || document.getElementById('content')
   );
 
   if (process.env.NODE_ENV !== 'production') {

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import request from 'supertest';
 import { expect } from 'chai';
 import 'should';
-import proxy from '../src/proxy';
+import proxy from '../proxy';
 
 const app = express();
 app.use(bodyParser.json());
@@ -108,7 +108,7 @@ describe('proxy', () => {
       .delete('/context/apis/koiki/people/test')
       .expect(200)
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.body).to.deep.equal({});
         done(err);
       });
   });

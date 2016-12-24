@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "jest": true
   },
   "rules": {
     "react/no-multi-comp": 0,
