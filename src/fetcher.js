@@ -24,17 +24,23 @@ const exec = ({
             headers
           })
           .then(
-            res => {
-              return after(values, res).then(
+            (res) => {
+              return after(values, res.body, res.res).then(
                 converted => {
-                  dispatch(success(converted));
-                  return converted;
+                  dispatch(success(converted, res));
+                  return Promise.resolve({
+                    body: converted,
+                    res: res.res
+                  });
                 }
               );
             },
-            err => {
-              dispatch(fail(err));
-              throw err;
+            (res) => {
+              dispatch(fail(res.body, res.res, res.err));
+              return Promise.reject({
+                body: res.body,
+                res: res.res
+              });
             }
           );
 };
@@ -62,13 +68,16 @@ export default class fetcher {
               values: _values,
               type: resource + '/' + action.toUpperCase() + '_START'
             }),
-            success: (res) => ({
+            success: (body, res) => ({
               values: _values,
+              body,
               res,
               type: resource + '/' + action.toUpperCase() + '_SUCCESS'
             }),
-            fail: (err) => ({
+            fail: (body, res, err) => ({
               values: _values,
+              body,
+              res,
               err,
               type: resource + '/' + action.toUpperCase() + '_FAIL'
             })
