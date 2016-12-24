@@ -18,7 +18,19 @@ describe('client', () => {
           }
         }
       },
-      dispatch: () => {},
+      dispatch: (action) => {
+        switch (action.type) {
+          case 'person/GETS_START':
+            expect(action.body).toBe(undefined);
+            expect(action.res).toBe(undefined);
+            break;
+          case 'person/GETS_SUCCESS':
+            expect(action.body).not.toBe(undefined);
+            expect(action.res).not.toBe(undefined);
+            break;
+          default:
+        }
+      },
       client
     });
     fetcher.person.gets().then(

@@ -27,7 +27,10 @@ const exec = ({
             (res) => {
               return after(values, res).then(
                 converted => {
-                  dispatch(success(converted, res));
+                  dispatch(success({
+                    body: converted,
+                    res
+                  }));
                   return Promise.resolve({
                     body: converted,
                     res: res.res
@@ -36,7 +39,7 @@ const exec = ({
               );
             },
             (res) => {
-              dispatch(fail(res.body, res.res, res.err));
+              dispatch(fail(res));
               return Promise.reject({
                 body: res.body,
                 res: res.res
@@ -68,13 +71,13 @@ export default class fetcher {
               values: _values,
               type: resource + '/' + action.toUpperCase() + '_START'
             }),
-            success: (body, res) => ({
+            success: ({ body, res }) => ({
               values: _values,
               body,
               res,
               type: resource + '/' + action.toUpperCase() + '_SUCCESS'
             }),
-            fail: (body, res, err) => ({
+            fail: ({ body, res, err }) => ({
               values: _values,
               body,
               res,
