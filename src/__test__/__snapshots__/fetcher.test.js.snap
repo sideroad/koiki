@@ -1,8 +1,13 @@
-exports[`client should be create app for client 1`] = `Object {}`;
+exports[`client should be create app for client 1`] = `
+Object {
+  "limit": 5,
+  "offset": 0,
+}
+`;
 
 exports[`client should be create app for client 2`] = `
 Object {
-  "first": "/apis/koiki/people?offset=0&limit=25",
+  "first": "/apis/koiki/people?offset=0&limit=5",
   "items": Array [
     Object {
       "age": 30,
@@ -16,27 +21,57 @@ Object {
     },
     Object {
       "age": 30,
-      "createdAt": "2016-10-15T04:42:48.000Z",
+      "createdAt": "2016-10-15T04:42:29.000Z",
       "hobbies": Object {
         "href": "/apis/koiki/people/koiki/hobbies",
       },
       "id": "koiki",
       "name": "koiki",
-      "updatedAt": "2016-10-15T04:42:48.000Z",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/hogehoge/hobbies",
+      },
+      "id": "hogehoge",
+      "name": "hogehoge",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/foo/hobbies",
+      },
+      "id": "foo",
+      "name": "foo",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/bar/hobbies",
+      },
+      "id": "bar",
+      "name": "bar",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
     },
   ],
-  "last": "/apis/koiki/people?offset=0&limit=25",
-  "limit": 25,
-  "next": null,
+  "last": "/apis/koiki/people?offset=10&limit=5",
+  "limit": 5,
+  "next": "/apis/koiki/people?offset=5&limit=5",
   "offset": 0,
   "prev": null,
-  "size": 2,
+  "size": 13,
 }
 `;
 
 exports[`client should be create app for client 3`] = `
 Object {
-  "first": "/apis/koiki/people?offset=0&limit=25",
+  "first": "/apis/koiki/people?offset=0&limit=5",
   "items": Array [
     Object {
       "age": 30,
@@ -50,20 +85,172 @@ Object {
     },
     Object {
       "age": 30,
-      "createdAt": "2016-10-15T04:42:48.000Z",
+      "createdAt": "2016-10-15T04:42:29.000Z",
       "hobbies": Object {
         "href": "/apis/koiki/people/koiki/hobbies",
       },
       "id": "koiki",
       "name": "koiki",
-      "updatedAt": "2016-10-15T04:42:48.000Z",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/hogehoge/hobbies",
+      },
+      "id": "hogehoge",
+      "name": "hogehoge",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/foo/hobbies",
+      },
+      "id": "foo",
+      "name": "foo",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/bar/hobbies",
+      },
+      "id": "bar",
+      "name": "bar",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
     },
   ],
-  "last": "/apis/koiki/people?offset=0&limit=25",
-  "limit": 25,
-  "next": null,
+  "last": "/apis/koiki/people?offset=10&limit=5",
+  "limit": 5,
+  "next": "/apis/koiki/people?offset=5&limit=5",
   "offset": 0,
   "prev": null,
-  "size": 2,
+  "size": 13,
+}
+`;
+
+exports[`client should be create app for client 4`] = `
+Object {
+  "limit": "5",
+  "offset": "5",
+}
+`;
+
+exports[`client should be create app for client 5`] = `
+Object {
+  "first": "/apis/koiki/people?offset=0&limit=5",
+  "items": Array [
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/apple/hobbies",
+      },
+      "id": "apple",
+      "name": "apple",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/grape/hobbies",
+      },
+      "id": "grape",
+      "name": "grape",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/orange/hobbies",
+      },
+      "id": "orange",
+      "name": "orange",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/nope/hobbies",
+      },
+      "id": "nope",
+      "name": "nope",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/yes/hobbies",
+      },
+      "id": "yes",
+      "name": "yes",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+  ],
+  "last": "/apis/koiki/people?offset=10&limit=5",
+  "limit": 5,
+  "next": "/apis/koiki/people?offset=10&limit=5",
+  "offset": 5,
+  "prev": "/apis/koiki/people?offset=0&limit=5",
+  "size": 13,
+}
+`;
+
+exports[`client should be create app for client 6`] = `
+Object {
+  "limit": "5",
+  "offset": "10",
+}
+`;
+
+exports[`client should be create app for client 7`] = `
+Object {
+  "first": "/apis/koiki/people?offset=0&limit=5",
+  "items": Array [
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/apple/hobbies",
+      },
+      "id": "apple",
+      "name": "apple",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/grape/hobbies",
+      },
+      "id": "grape",
+      "name": "grape",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+    Object {
+      "age": 30,
+      "createdAt": "2016-10-15T04:42:29.000Z",
+      "hobbies": Object {
+        "href": "/apis/koiki/people/orange/hobbies",
+      },
+      "id": "orange",
+      "name": "orange",
+      "updatedAt": "2016-10-15T04:42:29.000Z",
+    },
+  ],
+  "last": "/apis/koiki/people?offset=10&limit=5",
+  "limit": 5,
+  "next": null,
+  "offset": 10,
+  "prev": "/apis/koiki/people?offset=5&limit=5",
+  "size": 13,
 }
 `;
