@@ -17,11 +17,12 @@ export default class Html extends Component {
     assets: PropTypes.object,
     component: PropTypes.node,
     store: PropTypes.object,
-    statics: PropTypes.object
+    statics: PropTypes.object,
+    fetcher: PropTypes.object
   }
 
   render() {
-    const {assets, component, store, statics} = this.props;
+    const {assets, component, store, statics, fetcher} = this.props;
     const content = component ? ReactDOM.renderToString(component) : '';
     const head = Helmet.rewind();
 
@@ -43,7 +44,7 @@ export default class Html extends Component {
           {head.link.toComponent()}
           {head.script.toComponent()}
         </head>
-        <Body assets={assets} content={content} store={store} />
+        <Body assets={assets} content={content} store={store} fetcher={fetcher} />
       </html>
     );
   }

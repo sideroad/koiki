@@ -98,6 +98,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
                 origin={origin}
                 component={App}
                 cookie={cookie}
+                fetcher={fetcher}
               >
                 {routes(store, cookie)}
               </Route>,
@@ -120,13 +121,13 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
           res.status(200);
 
           global.navigator = {userAgent: req.headers['user-agent']};
-
           res.send('<!doctype html>\n' +
             ReactDOM.renderToString(
               <Html
                 assets={webpackIsomorphicTools.assets()}
                 component={component}
                 store={store}
+                fetcher={fetcher.get(urls)}
                 statics={statics}
               />));
         });

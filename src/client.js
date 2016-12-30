@@ -24,7 +24,8 @@ export default function client({urls, reducers, routes, dest = document.getEleme
   const fetcher = new Fetcher({
     dispatch: store.dispatch,
     client: new ApiClient(),
-    urls
+    urls,
+    serialized: window.__fetcher
   });
   const cookie = CookieDough();
 
@@ -39,6 +40,7 @@ export default function client({urls, reducers, routes, dest = document.getEleme
         component={App}
         urls={urls}
         cookie={cookie}
+        fetcher={fetcher}
       >
         {routes(store, cookie)}
       </Route>

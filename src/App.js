@@ -1,6 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import ApiClient from './apiclient';
-import Fetcher from './fetcher';
 import { connect } from 'react-redux';
 
 @connect(
@@ -33,17 +31,9 @@ export default class App extends Component {
   }
 
   getChildContext() {
-    const req = this.props.router ? this.props.router.req : undefined;
+    const fetcher = this.props.route.fetcher;
     return {
-      fetcher: new Fetcher({
-        urls: this.props.route.urls,
-        dispatch: this.props.dispatch,
-        client: new ApiClient(req ? {
-          cookie: req.get('cookie'),
-          origin: this.props.route.origin,
-          referer: this.props.route.origin
-        } : undefined)
-      }),
+      fetcher,
       lang: this.props.params.lang,
       i18n: this.props.i18n.msg,
       cookie: this.props.route.cookie

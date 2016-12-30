@@ -60,7 +60,8 @@ describe('client', () => {
           expect(dispatch.getCall(5).args[0].body.next).toBe(null);
           expect(dispatch.getCall(5).args[0].hasNext).toBe(false);
           done();
-        });
+        })
+        .catch(err => console.error(err));
       }
     );
   });
