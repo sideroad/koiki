@@ -1,14 +1,14 @@
-# Even faster React/Redux development
+Even faster React/Redux development
 
-## Installation
+# Installation
 
 ```
 npm i --save koiki
 ```
 
-## Usage
+# Usage
 
-### koiki.server / koiki.client
+## koiki.server / koiki.client
 |Parameter     |Type             |Meaning                        |Place to specify |Remark  |
 |:-------------|:----------------|:------------------------------|:----------------|:-------|
 |urls          |Object           |Resource URLs                  | client / server |        |
@@ -22,9 +22,8 @@ npm i --save koiki
 |handlers      |Object           |-                              | server          |        |
 |handlers.error|Function         |Error callback                 | server          |        |
 
-### Hot to fetch resources?
-
-1. Define URLs in urls.js
+## Hot to fetch resources?
+#### Define URLs in urls.js
 ```
 {
   person: {
@@ -39,23 +38,21 @@ npm i --save koiki
   }
 }
 ```
-
 First layer property will be use as of `person` resource.
 Second layer property will be use as of `gets` action. ( action name will be captalized )
 
-2. You can call `fetcher.person.gets` from asyncConnect or containers context.
+#### You can call `fetcher.person.gets` from asyncConnect or containers context.
 Then result will be call with actions below.
 - When resource start to fetch call 'person/GETS_START' action
 - When getting resource has been succeeded, 'person/GETS_SUCCESS' action.
 - When getting resource has been failed, 'person/GETS_FAILED' action.
 
-fetcher call example.
+Example below.
 ```
 fetcher.person.gets({
   age: 25
 });
 ```
-
 fetcher will be response Promise object. So you can do like this.
 ```
 fetcher.person.save({
@@ -66,7 +63,7 @@ fetcher.person.save({
 );
 ```
 
-3. Setup reducer to set onto store.
+#### Setup reducer to set onto store.
 
 Responsed object can get from action.body.
 action.res has Fetch API's responsed object.
@@ -84,7 +81,7 @@ export default function reducer(state = initialState, action = {}) {
 ```
 
 
-#### Advanced Usage
+### Advanced Usage
 
 You can write after / override / next properties under urls object to customize fetcher logic.
 
@@ -93,7 +90,7 @@ You can write after / override / next properties under urls object to customize 
 
 When resource has hypermedia link, we can call `fetcher.person.gets.next()` to get next items.
 
-1. Set next method under urls third layer
+#### Set next method under urls third layer
 ```
 {
   person: {
@@ -115,10 +112,10 @@ When resource has hypermedia link, we can call `fetcher.person.gets.next()` to g
 }
 ```
 
-2. We can use `fetcher.person.gets.next` after called `fetcher.person.gets` on containers.
+#### We can use `fetcher.person.gets.next` after called `fetcher.person.gets` on containers.
 
 
-### Breaking change
+## Breaking change
 v4.0.0
 - fetcher callback object is deeper than before.
  - Before
