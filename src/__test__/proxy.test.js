@@ -5,6 +5,8 @@ import { expect } from 'chai';
 import 'should';
 import proxy from '../proxy';
 
+import './proxy.mock';
+
 const app = express();
 app.use(bodyParser.json());
 

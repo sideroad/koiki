@@ -43,7 +43,6 @@ const exec = ({
               );
             },
             (res) => {
-              console.log(res);
               dispatch(fail(res));
               return Promise.reject({
                 body: res.body,
@@ -69,7 +68,6 @@ const getExecOptions = (applyWith, {options, values, urls, dispatch, client, res
     type: resource + '/' + action.toUpperCase() + '_START'
   }),
   success: ({ body, res, next }) => {
-    console.log('success', resource, action);
     applyWith[resource][action].nextUrl = next;
     applyWith[resource][action].next = () => generateNext(applyWith, { // eslint-disable-line no-use-before-define
       action,
@@ -98,7 +96,6 @@ const getExecOptions = (applyWith, {options, values, urls, dispatch, client, res
 });
 
 const generateNext = (applyWith, { action, options, resource, urls, next, dispatch, client }) => {
-  console.log('generateNext', resource, action);
 
   if (! next) {
     return Promise.resolve();
@@ -176,7 +173,6 @@ export default class fetcher {
           const promise = exec(execOptions);
           return promise;
         };
-        console.log('constructor', resource, action);
         deserialize(this, {serialized, resource, action, urls, dispatch, client});
       });
     });
