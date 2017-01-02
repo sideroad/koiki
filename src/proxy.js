@@ -38,7 +38,7 @@ export default function proxy({
   app.use(`${prefix}/*`, (req, res) => {
     const apiUri = req.originalUrl.replace(new RegExp(prefix), '');
     const url = `${protocol}://${host}${apiUri}`;
-    let options = [url, {
+    const options = [url, {
       method: req.method,
       headers: {
         ...req.headers,
@@ -74,10 +74,7 @@ export default function proxy({
       logger('# Proxing with override', url);
       customizerOverride(req, res);
     } else {
-      options = customizerBefore ?
-      customizerBefore(...options, fetchOptions =>
-        fetcher(fetchOptions, res, customizerAfter || after, logger))
-      : before(...options, fetchOptions =>
+      (customizerBefore || before)(...options, fetchOptions =>
         fetcher(fetchOptions, res, customizerAfter || after, logger));
     }
   });
