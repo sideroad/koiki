@@ -1,4 +1,5 @@
 import matcher from 'path-to-regexp';
+import util from 'util';
 import {} from 'isomorphic-fetch';
 
 const fetcher = (options, res, after, logger) => {
@@ -33,7 +34,7 @@ export default function proxy({
   customizer,
   before = (url, options, cb) => cb([url, options]),
   after = (json, cb) => cb(json),
-  logger = (...args) => console.log(...args)
+  logger = (...args) => console.log(util.inspect(...args))
 }) {
   app.use(`${prefix}/*`, (req, res) => {
     const apiUri = req.originalUrl.replace(new RegExp(prefix), '');
