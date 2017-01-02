@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import request from 'supertest';
-import { expect } from 'chai';
 import 'should';
 import proxy from '../proxy';
 
@@ -85,7 +84,7 @@ describe('proxy', () => {
       })
       .expect(201)
       .end((err, res) => {
-        expect(res.body).to.deep.equal({
+        expect(res.body).toEqual({
           id: 'test',
           href: '/apis/koiki/people/test'
         });
@@ -98,7 +97,7 @@ describe('proxy', () => {
       .send({})
       .expect(400)
       .end((err, res) => {
-        expect(res.body).to.deep.equal({
+        expect(res.body).toEqual({
           name: 'Invalid value[undefined]',
           age: 'Invalid value[undefined]'
         });
@@ -110,7 +109,7 @@ describe('proxy', () => {
       .delete('/context/apis/koiki/people/test')
       .expect(200)
       .end((err, res) => {
-        expect(res.body).to.deep.equal({});
+        expect(res.body).toEqual({});
         done(err);
       });
   });

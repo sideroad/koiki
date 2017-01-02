@@ -43,9 +43,11 @@ export default function proxy({
       headers: {
         ...req.headers,
         host
-      },
-      body: req.method === 'POST' ? JSON.stringify(req.body) : ''
+      }
     }];
+    if (req.body) {
+      options[1].body = JSON.stringify(req.body);
+    }
     let customizerBefore;
     let customizerAfter;
     let customizerOverride;
