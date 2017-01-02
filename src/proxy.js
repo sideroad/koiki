@@ -15,14 +15,14 @@ const fetcher = (options, res, after, logger) => {
                 resolve(_json);
               });
             }),
-            err => logger('#Parse Error ', err) || res.json(err)
+            err => logger('# Parse Error ', {}, err) || res.json(err)
           )
           .then(
             json => res.status(apiRes.status).json(json)
           ),
-      err => logger('#Fetch Error ', options, err) || res.json(err)
+      err => logger('# Fetch Error ', options, err) || res.json(err)
     ).catch(
-      err => logger('#Unexpected Error ', err) || res.json(err)
+      err => logger('# Unexpected Error ', {}, err) || res.json(err)
     );
 };
 
@@ -34,7 +34,7 @@ export default function proxy({
   customizer,
   before = (url, options, cb) => cb([url, options]),
   after = (json, cb) => cb(json),
-  logger = (...args) => console.log(util.inspect(...args))
+  logger = (title, data, err) => console.log(title, util.inspect(data), util.inspect(err))
 }) {
   app.use(`${prefix}/*`, (req, res) => {
     const apiUri = req.originalUrl.replace(new RegExp(prefix), '');
