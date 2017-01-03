@@ -72,23 +72,12 @@ fetchMock.get('https://chaus.herokuapp.com/apis/koiki/people?limit=5', {
   ]
 });
 
-fetchMock.post('https://chaus.herokuapp.com/apis/koiki/colors', {
-  'offset': 0,
-  'limit': 25,
-  'size': 1,
-  'first': '/apis/koiki/colors?offset=0&limit=25',
-  'last': '/apis/koiki/colors?offset=0&limit=25',
-  'prev': null,
-  'next': null,
-  'items': [
-    {
-      'updatedAt': '2016-12-17T03:32:21.000Z',
-      'createdAt': '2016-12-17T03:30:32.000Z',
-      'code': '#5654A2',
-      'name': 'kikyo',
-      'id': 'kikyo'
-    }
-  ]
+fetchMock.post('https://chaus.herokuapp.com/apis/koiki/colors/red', {
+  'updatedAt': '2016-12-17T03:32:21.000Z',
+  'createdAt': '2016-12-17T03:30:32.000Z',
+  'code': '#AA0000',
+  'name': 'red',
+  'id': 'red'
 });
 
 fetchMock.mock('https://chaus.herokuapp.com/apis/koiki/people?limit=5', (urls, opts)=> {

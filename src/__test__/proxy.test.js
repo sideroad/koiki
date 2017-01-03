@@ -32,12 +32,13 @@ proxy({
         }
       }
     },
-    '/context/apis/koiki/colors': {
+    '/context/apis/koiki/colors/:id': {
       GET: {
         override: (req, res) => {
           res.status(400).json({
             url: req.originalUrl,
-            message: 'should be fail'
+            message: 'should be fail',
+            id: req.params.id
           });
         }
       }
@@ -67,11 +68,12 @@ describe('proxy', () => {
   });
   it('should proxy GET request with customizer override', (done) => {
     request(app)
-      .get('/context/apis/koiki/colors')
+      .get('/context/apis/koiki/colors/red')
       .expect(400)
       .end((err, res) => {
         res.body.should.have.property('message', 'should be fail');
-        res.body.should.have.property('url', '/context/apis/koiki/colors');
+        res.body.should.have.property('url', '/context/apis/koiki/colors/red');
+        res.body.should.have.property('id', 'red');
         done(err);
       });
   });

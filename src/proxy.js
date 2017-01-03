@@ -1,6 +1,7 @@
 import matcher from 'path-to-regexp';
 import util from 'util';
-import {} from 'isomorphic-fetch';
+import 'isomorphic-fetch';
+import UrlPattern from 'url-pattern';
 
 const fetcher = (options, res, after, logger) => {
   logger('# Proxing', ...options);
@@ -46,6 +47,7 @@ export default function proxy({
         host
       }
     }];
+    const originalUrl = req.originalUrl.split('?')[0];
     if (req.body) {
       options[1].body = JSON.stringify(req.body);
     }
@@ -53,7 +55,7 @@ export default function proxy({
     let customizerAfter;
     let customizerOverride;
     if (customizer) {
-      const keys = Object.keys(req.params).map(key => ({
+      const keys = Object.keys(Object.assign({}, req.params)).map(key => ({
         name: key,
         prefix: '/',
         delimiter: '/'
@@ -61,13 +63,15 @@ export default function proxy({
       Object.keys(customizer).some(
         (uri) => {
           if (
-            matcher(uri, keys).exec(req.originalUrl.split('?')[0]) &&
+            matcher(uri, keys).exec(originalUrl) &&
             customizer[uri] &&
             customizer[uri][req.method]
           ) {
             customizerBefore = customizer[uri][req.method].before;
             customizerAfter = customizer[uri][req.method].after;
             customizerOverride = customizer[uri][req.method].override;
+            const pattern = new UrlPattern(uri);
+            req.params = pattern.match(originalUrl);
           }
         }
       );
