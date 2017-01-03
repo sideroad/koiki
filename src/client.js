@@ -18,7 +18,14 @@ import createRouterOpts from './createRouterOpts';
 
 export default function client({urls, reducers, routes, dest = document.getElementById('content')}) {
   const createScrollHistory = useScroll(createBrowserHistory);
-  const history = useRouterHistory(createScrollHistory)(createRouterOpts());
+
+  const history = useRouterHistory(createScrollHistory)(createRouterOpts({
+    shouldUpdateScroll: (oldLocation, newLocation) => (
+      // Don't scroll if the pathname is the same
+      oldLocation ? newLocation.pathname !== oldLocation.pathname
+                  : newLocation.pathname !== location.pathname
+    )
+  }));
 
   const store = createStore({reducers, history, data: window.__data});
   const fetcher = new Fetcher({
