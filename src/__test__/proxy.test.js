@@ -93,6 +93,19 @@ describe('proxy', () => {
         done(err);
       });
   });
+  it('should be succeeded even if response does not has JSON', (done) => {
+    request(app)
+      .post('/context/apis/koiki/people/test')
+      .send({
+        name: 'test',
+        age: 10
+      })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).toEqual({});
+        done(err);
+      });
+  });
   it('should faild proxy POST request', (done) => {
     request(app)
       .post('/context/apis/koiki/people')

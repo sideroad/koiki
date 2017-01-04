@@ -91,5 +91,4 @@ fetchMock.mock('https://chaus.herokuapp.com/apis/koiki/people?limit=5', (urls, o
   };
 });
 
-fetchMock.delete('https://chaus.herokuapp.com/apis/koiki/people/test?limit=5', {
-});
+fetchMock.mock('https://chaus.herokuapp.com/apis/koiki/people/test?limit=5', () => '');

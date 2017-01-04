@@ -7,20 +7,23 @@ const fetcher = (options, res, after, logger) => {
   logger('# Proxing', ...options);
   fetch(...options)
     .then(
-      apiRes =>
-        apiRes
-          .json()
-          .then(
-            (json) => new Promise((resolve) => {
-              after(json, _json => {
-                resolve(_json);
-              });
-            }),
-            err => logger('# Parse Error ', {}, err) || res.json(err)
-          )
-          .then(
-            json => res.status(apiRes.status).json(json)
-          ),
+      (apiRes) => {
+        if (apiRes.ok) {
+          apiRes
+            .json()
+            .then(
+              (json) => after(json, (converted) => res.json(converted)),
+              () => res.json({})
+            );
+        } else {
+          apiRes
+            .json()
+            .then(
+              json => res.status(apiRes.status).json(json),
+              () => res.status(apiRes.status).json({})
+            );
+        }
+      },
       err => logger('# Fetch Error ', options, err) || res.json(err)
     ).catch(
       err => logger('# Unexpected Error ', {}, err) || res.json(err)
