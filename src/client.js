@@ -32,7 +32,8 @@ export default function client({urls, reducers, routes, dest = document.getEleme
     dispatch: store.dispatch,
     client: new ApiClient(),
     urls,
-    serialized: window.__fetcher
+    serialized: window.__fetcher,
+    type: 'client'
   });
   const cookie = CookieDough();
 

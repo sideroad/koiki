@@ -71,7 +71,8 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
     const fetcher = new Fetcher({
       client,
       dispatch: store.dispatch,
-      urls
+      urls,
+      type: 'server'
     });
 
     function hydrateOnClient() {

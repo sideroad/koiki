@@ -14,7 +14,8 @@ const exec = ({
     credentials,
     headers,
     after = (_values, res) => new Promise(resolve => resolve(res.body)),
-    next
+    next,
+    cache
   }) => {
   dispatch(start(fetch.values));
   return client
@@ -24,7 +25,8 @@ const exec = ({
             values,
             mode,
             credentials,
-            headers
+            headers,
+            cache,
           })
           .then(
             (res) => {
@@ -52,13 +54,15 @@ const exec = ({
           );
 };
 
-const getExecOptions = (applyWith, {options, values, urls, dispatch, client, resource, action}) => ({
+const getExecOptions = (applyWith, {options, values, urls, dispatch, client, resource, action, type}) => ({
   dispatch,
   client,
   url: urls[resource][action].url,
   method: urls[resource][action].method,
   after: urls[resource][action].after,
   next: urls[resource][action].next,
+  cache: urls[resource][action].cache &&
+         urls[resource][action].cache[type],
   mode: options.mode !== undefined ? options.mode : urls[resource][action].mode,
   credentials: options.credentials !== undefined ? options.credentials : urls[resource][action].credentials,
   headers: options.headers !== undefined ? options.headers : urls[resource][action].headers,
@@ -160,7 +164,7 @@ const deserialize = (applyWith, {serialized, resource, action, urls, dispatch, c
 };
 
 export default class fetcher {
-  constructor({urls, dispatch, client, serialized}) {
+  constructor({urls, dispatch, client, serialized, type}) {
 
     Object.keys(urls).map(resource => {
       this[resource] = {};
@@ -168,7 +172,7 @@ export default class fetcher {
       Object.keys(urls[resource]).map(action => {
         this[resource][action] = (_values, options = {}) => {
           const values = Object.assign( {}, urls[resource][action].defaults || {}, _values);
-          const execOptions = getExecOptions(this, { options, values, urls, dispatch, client, resource, action });
+          const execOptions = getExecOptions(this, { options, values, urls, dispatch, client, resource, action, type });
           this[resource][action].options = options;
           const promise = exec(execOptions);
           return promise;

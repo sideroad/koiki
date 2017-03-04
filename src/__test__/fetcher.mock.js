@@ -48,3 +48,16 @@ fetchMock.get('https://chaus.herokuapp.com/apis/koiki/people?offset=10&limit=5',
   'prev': '/apis/koiki/people?offset=5&limit=5',
   'size': 13,
 });
+
+fetchMock.get('https://chaus.herokuapp.com/apis/koiki/fruits?offset=0&limit=5', {
+  'first': '/apis/koiki/fruits?offset=0&limit=5',
+  'items': [
+    { id: 'apple' },
+  ],
+  'last': '/apis/koiki/fruits?offset=10&limit=5',
+  'limit': 5,
+  'offset': 0,
+  'prev': null,
+  next: null,
+  'size': 1,
+});

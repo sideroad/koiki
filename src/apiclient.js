@@ -1,4 +1,5 @@
 import __ from 'lodash';
+import hash from 'object-hash';
 import {} from 'isomorphic-fetch';
 
 const string = values => {
@@ -77,16 +78,27 @@ const deleteHeader = (values, _headers, defaultHeaders, mode, credentials) => {
 
 export default class ApiClient {
   constructor(defaultHeaders = {}, logger = (...args) => console.log(...args)) {
-
-    this.fetchJSON = ({url = '', method = 'GET', values = {}, headers, mode, credentials }) => {
+    const cached = {};
+    this.fetchJSON = ({url = '', method = 'GET', values = {}, headers, mode, credentials, cache }) => {
 
       if ( !url ) {
         throw new Error('URL does not specified');
       }
 
+      const _values = Object.assign({}, values);
+      const _url = normalize(url, _values) + (method === 'GET' ? '?' + string(_values) : '');
+
+      // return from cache
+      const hashed = hash(_url);
+      if (cache &&
+          method === 'GET' &&
+          cached[hashed]
+      ) {
+        logger('## return from cache ', _url, method, _values);
+        return Promise.resolve(cached[hashed]);
+      }
+
       return new Promise((resolve, reject) => {
-        const _values = Object.assign({}, values);
-        const _url = normalize(url, _values) + (method === 'GET' ? '?' + string(_values) : '');
         logger('## fetch ', _url, method, _values);
 
         fetch( _url, (method === 'GET' ? getHeader( headers, defaultHeaders, mode, credentials ) :
@@ -108,6 +120,12 @@ export default class ApiClient {
                    });
                  } else if ( method === 'GET' ) {
                    res.json().then((json) => {
+                     if (cache) {
+                       cached[hashed] = {
+                         body: __.cloneDeep(json),
+                         res: __.cloneDeep(res)
+                       };
+                     }
                      resolve({
                        body: json,
                        res
