@@ -116,6 +116,16 @@ When resource has hypermedia link, we can call `fetcher.person.gets.next()` to g
 
 
 ## Breaking change
+v5.0.0
+- Update webpack version to 2
+- bin/server.js, config for webpack directory no longer used anymore.
+- .babelrc, server.babel.js no longer used anymore.
+- .koikirc can be use to override webpack settings.
+- webpack dependencies does not installed app self
+
+See below to know example
+https://github.com/sideroad/floras/commit/af6853c58b58d4a32aa4a3d1815f53ed48f92a81
+
 v4.0.0
 - fetcher callback object is deeper than before.
  - Before

@@ -87,11 +87,6 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
       );
     }
 
-    if (__DISABLE_SSR__) {
-      hydrateOnClient();
-      return;
-    }
-
     match({
       history,
       routes: <Route
