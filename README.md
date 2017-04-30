@@ -122,9 +122,10 @@ v5.0.0
 - .babelrc, server.babel.js no longer used anymore.
 - .koikirc can be use to override webpack settings.
 - webpack dependencies does not installed app self
+- Be able to inject environment values which started with KOIKI_ prefix.
 
 See below to know example
-https://github.com/sideroad/floras/commit/af6853c58b58d4a32aa4a3d1815f53ed48f92a81
+https://github.com/sideroad/floras/commit/68ee25cccdc94cc5bbb544d7f6e99842a6ff3300
 
 v4.0.0
 - fetcher callback object is deeper than before.
