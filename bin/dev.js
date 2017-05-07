@@ -13,29 +13,25 @@ const app = {
   port: 3000
 };
 
-require('./lib/server')(function servercb() {
-  const config = require('../config/dev.config');
-  const WebpackDevServer = require('webpack-dev-server');
-  const compiler = webpack(config);
+const server = require('./lib/server');
+const config = require('../config/dev.config');
+const WebpackDevServer = require('webpack-dev-server');
 
+const compiler = webpack(config);
+
+server(function servercb() {
   const dev = new WebpackDevServer(compiler, {
     contentBase: 'http://' + watch.host + ':' + watch.port,
     quiet: true,
     noInfo: true,
-    reload: true,
-    inline: true,
     lazy: false,
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000
-    },
+    filename: config.output.filename,
     publicPath: config.output.publicPath,
     headers: {'Access-Control-Allow-Origin': '*'},
-    stats: {colors: true}
+    stats: { colors: true }
   });
-  compiler.plugin('done', function donecb() {
-    dev.listen(watch.port, function devcb() {
-      require('open')('http://' + app.host + ':' + app.port);
-    });
+  dev.use(dev.middleware);
+  dev.listen(watch.port, function devcb() {
+    require('open')('http://' + app.host + ':' + app.port);
   });
 });

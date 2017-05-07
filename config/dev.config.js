@@ -91,9 +91,9 @@ module.exports = _.merge({
   },
   resolve: {
     modules: [
-      path.join(cwd, 'src'),
+      'src',
       'node_modules',
-      path.join(cwd, 'i18n'),
+      'i18n',
     ],
     extensions: ['.json', '.js', '.jsx', '.properties'],
   },
@@ -108,6 +108,7 @@ module.exports = _.merge({
     webpackIsomorphicToolsPlugin.development()
   ],
   externals: {
-    fs: '{}'
+    fs: '{}',
+    'koiki-dev': '{}'
   }
 }, rc.webpack && rc.webpack.dev ? rc.webpack.dev : {});
