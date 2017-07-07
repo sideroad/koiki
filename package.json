@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "5.0.4",
+  "version": "5.0.5",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -61,10 +61,11 @@
     "open": "0.0.5",
     "path-to-regexp": "^1.7.0",
     "piping": "^0.3.0",
+    "prop-types": "^15.5.10",
     "properties-reader": "0.0.15",
     "qs": "^6.3.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "react-helmet": "^3.1.0",
     "react-redux": "^4.0.0",
     "react-router": "^2.8.1",
