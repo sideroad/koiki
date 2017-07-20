@@ -1,5 +1,3 @@
-require('babel-polyfill');
-
 // Webpack config for development
 var _ = require('lodash');
 var fs = require('fs-extra');
@@ -91,7 +89,7 @@ module.exports = _.merge({
   },
   resolve: {
     modules: [
-      'src',
+      path.join(cwd, 'src'),
       'node_modules',
       'i18n',
     ],
