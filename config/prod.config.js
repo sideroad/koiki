@@ -38,7 +38,7 @@ module.exports = _.merge({
           objectAssign: 'Object.assign'
         }
       }]},
-      { test: /\.css$/, use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader'] }) },
+      { test: /\.css$/, use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }) },
       {
         test: /\.less$/,
         use: ExtractTextPlugin.extract({
@@ -50,7 +50,7 @@ module.exports = _.merge({
               importLoaders: 2,
               sourceMap: true
             }
-          }, 'postcss-loader', {
+          }, {
             loader: 'less-loader',
             options: {
               outputStyle: 'expanded',
@@ -71,7 +71,7 @@ module.exports = _.merge({
               importLoaders: 2,
               sourceMap: true
             }
-          }, 'postcss-loader', {
+          }, {
             loader: 'sass-loader',
             options: {
               outputStyle: 'expanded',
@@ -95,7 +95,7 @@ module.exports = _.merge({
           mimetype: 'application/octet-stream'
         }
       }]},
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, use: 'file-loader' },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, use: "file-loader" },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, use: [{
         loader: 'url-loader',
         options: {
