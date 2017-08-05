@@ -39,7 +39,7 @@ module.exports = _.merge({
           objectAssign: 'Object.assign'
         }
       }, 'eslint-loader']},
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
       { test: /\.less$/, use: [
         {
           loader: 'style-loader'
@@ -53,6 +53,7 @@ module.exports = _.merge({
             localIdentName: '[local]___[hash:base64:5]'
           },
         },
+        'postcss-loader',
         {
           loader: 'less-loader',
           options: {
@@ -74,6 +75,7 @@ module.exports = _.merge({
             localIdentName: '[local]___[hash:base64:5]'
           },
         },
+        'postcss-loader',
         {
           loader: 'sass-loader',
           options: {
