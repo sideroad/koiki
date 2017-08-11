@@ -29,11 +29,37 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment}) {
+export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment, name, description}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
-  app.get('*', (req, res, next)=>{
+  app.get('/manifest.json', (req, res) => {
+    const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';
+
+    res.json({
+      dir: 'ltr',
+      lang,
+      name: name || origin,
+      display: 'fullscreen',
+      start_url: `${origin}/${lang}`,
+      short_name: name || origin,
+      theme_color: 'transparent',
+      description: description || '',
+      orientation: 'any',
+      background_color: 'transparent',
+      related_applications: [],
+      prefer_related_applications: false,
+      icons: [
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '250x250'
+        }
+      ]
+    });
+  });
+
+  app.get('*', (req, res, next) => {
     if ( !isDevelopment && req.headers['x-forwarded-proto'] !== 'https') {
       res.redirect(origin + req.url);
     } else {

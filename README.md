@@ -14,7 +14,9 @@ npm i --save koiki
 |urls          |Object           |Resource URLs                  | client / server |        |
 |reducers      |Object           |Reducers                       | client / server |        |
 |routes        |Object           |Routes                         | client / server |        |
-|isDevelopment |Boolean          |Development Flag (For webpack) | server |        |
+|isDevelopment |Boolean          |Development Flag (For webpack) | server          |        |
+|name          |String           |Used for manifest.json         | server          |        |
+|description   |String           |Used for manifest.json         | server          |        |
 |app           |Object           |Instance of express            | server          |        |
 |path          |String           |Root URI                       | server          |        |
 |origin        |String           |App origin URL                 | server          |        |
