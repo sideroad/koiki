@@ -130,6 +130,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
         res.redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
         handlers.error(error);
+        res.set('Content-Type', 'text/html');
         res.status(500);
         hydrateOnClient();
       } else if (renderProps) {
@@ -139,7 +140,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
               <ReduxAsyncConnect {...renderProps} store={store} />
             </Provider>
           );
-
+          res.set('Content-Type', 'text/html');
           res.status(200);
 
           global.navigator = {userAgent: req.headers['user-agent']};
@@ -154,6 +155,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
               />));
         });
       } else {
+        res.set('Content-Type', 'text/html');
         res.status(404).send('Not found');
       }
     });
