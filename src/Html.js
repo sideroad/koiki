@@ -38,7 +38,7 @@ export default class Html extends Component {
                   rel="stylesheet" type="text/css" charSet="UTF-8"/>
           )}
           {Object.keys(statics || {}).map((tag) =>
-            tag === 'link' ? statics[tag].map((attributes) => <link key={attributes.href} {...attributes} />) :
+            tag === 'link' ? statics[tag].map((attributes) => <link key={`${attributes.rel}-${attributes.href}`} {...attributes} />) :
             tag === 'script' ? statics[tag].map((attributes) => <script key={attributes.src} {...attributes} />) : ''
           )}
           {head.base.toComponent()}

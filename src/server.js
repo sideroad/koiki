@@ -53,7 +53,47 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
         {
           src: '/images/favicon.png',
           type: 'image/png',
-          sizes: '250x250'
+          sizes: '48x48'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '72x72'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '96x96'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '144x144'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '168x168'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '192x192'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '256x256'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '384x384'
+        },
+        {
+          src: '/images/favicon.png',
+          type: 'image/png',
+          sizes: '512x512'
         }
       ]
     });
