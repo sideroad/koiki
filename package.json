@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "5.3.5",
+  "version": "5.3.6",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -18,12 +18,12 @@
     "koiki-dev": "./bin/dev.js"
   },
   "scripts": {
-    "build": "babel src --out-dir lib --ignore '**/__test__/*.test.js'",
+    "build": "babel src --out-dir lib --ignore '**/__test__/*.test.js,src/static/*'",
     "test": "jest",
     "test-update": "jest -u",
     "test-watch": "jest --watch",
     "lint": "eslint src",
-    "pub": "rm -Rf lib/* && npm run build && npm run lint && npm test && npm publish ."
+    "pub": "rm -Rf lib/* && npm run build && cp -R src/static lib/. && npm run lint && npm test && npm publish ."
   },
   "author": "sideroad",
   "license": "MIT",
