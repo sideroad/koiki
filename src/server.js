@@ -35,14 +35,14 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
-  app.use('/static', express.static(`${__dirname}/static`));
+  app.use('/', express.static(`${__dirname}/static`));
   app.get('/manifest.json', (req, res) => {
     const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';
 
     res.json(Object.assign({
       dir: 'ltr',
       lang,
-      name: name || origin,
+      name: origin,
       display: 'fullscreen',
       start_url: `${origin}/${lang}`,
       short_name: origin,
