@@ -134,6 +134,7 @@ module.exports = _.merge({
     webpackIsomorphicToolsPlugin
   ],
   externals: {
-    fs: '{}'
+    fs: '{}',
+    express: '{}',
   }
 }, rc.webpack && rc.webpack.prod ? rc.webpack.prod : {});

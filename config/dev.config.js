@@ -107,6 +107,7 @@ module.exports = _.merge({
   ],
   externals: {
     fs: '{}',
-    'koiki-dev': '{}'
+    'koiki-dev': '{}',
+    express: '{}',
   }
 }, rc.webpack && rc.webpack.dev ? rc.webpack.dev : {});
