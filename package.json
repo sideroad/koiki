@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "5.3.2",
+  "version": "5.3.3",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -48,6 +48,7 @@
     "cookie-dough": "^0.1.0",
     "css-loader": "^0.28.0",
     "eslint-loader": "^1.0.0",
+    "express": "^4.15.4",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.9.0",
     "isomorphic-fetch": "^2.2.1",
@@ -100,7 +101,6 @@
     "eslint-config-airbnb": "0.1.0",
     "eslint-plugin-import": "^0.8.0",
     "eslint-plugin-react": "^3.5.0",
-    "express": "^4.14.0",
     "fetch-mock": "^5.8.0",
     "jest": "^18.0.0",
     "mocha": "^3.2.0",

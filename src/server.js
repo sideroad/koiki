@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import createStore from './create';
-import {set} from './i18n';
-import ApiClient from './apiclient';
-import Fetcher from './fetcher';
-import stringify from './stringify';
 import { Route, match } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import recursive from 'recursive-readdir-sync';
 import PropertiesReader from 'properties-reader';
+import CookieDough from 'cookie-dough';
+import express from 'express';
+
+import createStore from './create';
+import { set } from './i18n';
+import ApiClient from './apiclient';
+import Fetcher from './fetcher';
+import stringify from './stringify';
+import createRouterOpts from './createRouterOpts';
 import Html from './Html';
 import App from './App';
-import CookieDough from 'cookie-dough';
-import createRouterOpts from './createRouterOpts';
 
 const loadi18n = (dir, i18n) => {
   const path = require('path');
@@ -29,74 +31,33 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment, name, description}) {
+export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment, manifest = {}}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
+  app.use('/static', express.static(`${__dirname}/static`));
   app.get('/manifest.json', (req, res) => {
     const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';
 
-    res.json({
+    res.json(Object.assign({
       dir: 'ltr',
       lang,
       name: name || origin,
       display: 'fullscreen',
       start_url: `${origin}/${lang}`,
-      short_name: name || origin,
+      short_name: origin,
       theme_color: 'transparent',
-      description: description || '',
+      description: '',
       orientation: 'any',
       background_color: 'transparent',
       related_applications: [],
       prefer_related_applications: false,
-      icons: [
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '48x48'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '72x72'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '96x96'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '144x144'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '168x168'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '192x192'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '256x256'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '384x384'
-        },
-        {
-          src: '/images/favicon.png',
-          type: 'image/png',
-          sizes: '512x512'
-        }
-      ]
-    });
+      icons: ['48', '72', '96', '144', '168', '192', '256', '384', '512'].map(size => ({
+        src: '/images/favicon.png',
+        type: 'image/png',
+        sizes: `${size}x${size}`
+      }))
+    }, manifest));
   });
 
   app.get('*', (req, res, next) => {
