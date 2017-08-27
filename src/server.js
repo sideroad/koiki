@@ -31,7 +31,7 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment, manifest = {}}) {
+export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment = false, manifest = {}}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
 
@@ -92,7 +92,7 @@ export default function server({app, path, urls, origin, i18ndir, reducers, rout
     const cookie = new CookieDough(req);
     const history = createHistory(createRouterOpts());
 
-    const store = createStore({reducers, history});
+    const store = createStore({reducers, history, isDevelopment});
     store.dispatch(set( i18n[req.params.lang] ));
 
     const fetcher = new Fetcher({

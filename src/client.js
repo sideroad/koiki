@@ -16,7 +16,7 @@ import App from './App';
 import CookieDough from 'cookie-dough';
 import createRouterOpts from './createRouterOpts';
 
-export default function client({urls, reducers, routes, dest = document.getElementById('content')}) {
+export default function client({urls, reducers, routes, dest = document.getElementById('content'), isDevelopment = false}) {
   const createScrollHistory = useScroll(createBrowserHistory);
 
   const history = useRouterHistory(createScrollHistory)(createRouterOpts({
@@ -27,7 +27,7 @@ export default function client({urls, reducers, routes, dest = document.getEleme
     )
   }));
 
-  const store = createStore({reducers, history, data: window.__data});
+  const store = createStore({reducers, history, data: window.__data, isDevelopment});
   const fetcher = new Fetcher({
     dispatch: store.dispatch,
     client: new ApiClient(),
