@@ -1,13 +1,15 @@
 import passport from 'passport';
 import { Strategy as GithubStrategy } from 'passport-github2';
-import { Strategy as FacebookStrategy } from 'passport-github2';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { Strategy as TwitterStrategy } from 'passport-twitter';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 
 const strategies = {
   github: GithubStrategy,
-  facebook: FacebookStrategy
+  facebook: FacebookStrategy,
+  twitter: TwitterStrategy,
 };
 
 const applyStrategy = (authenticator, config, Strategy, origin) => {
