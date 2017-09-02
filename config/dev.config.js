@@ -109,5 +109,7 @@ module.exports = _.merge({
     fs: '{}',
     'koiki-dev': '{}',
     express: '{}',
+    passporter: '{}',
+    passport: '{}'
   }
 }, rc.webpack && rc.webpack.dev ? rc.webpack.dev : {});

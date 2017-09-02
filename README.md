@@ -18,12 +18,26 @@ npm i --save koiki
 |manifest      |Object           |Extend manifest.json setting   | server          |        |
 |app           |Object           |Instance of express            | server          |        |
 |path          |String           |Root URI                       | server          |        |
-|origin        |String           |App origin URL                 | server          |        |
+|origin        |String           |Origin URL                     | server          |        |
 |i18ndir       |String           |i18n properties directory path | server          |        |
 |handlers      |Object           |-                              | server          |        |
 |handlers.error|Function         |Error callback                 | server          |        |
 
-## Hot to fetch resources?
+## How to apply Authentication?
+```
+import { passporter } from 'koiki';
+import express from 'express';
+
+const app = express();
+passporter.use({
+  github: {
+    appId: 'PLEASE SET GITHUB API CLIENT ID',
+    secret: 'PLEASE SET GITHUB API SECRET ID',
+  }
+}, app, originUrl);
+```
+
+## How to fetch resources?
 #### Define URLs in urls.js
 ```
 {
@@ -117,6 +131,9 @@ When resource has hypermedia link, we can call `fetcher.person.gets.next()` to g
 
 
 ## Breaking change
+v6.0.0
+- Add Authentication feature
+
 v5.0.0
 - Update webpack version to 2
 - bin/server.js, config for webpack directory no longer used anymore.

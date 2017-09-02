@@ -8,7 +8,6 @@ import recursive from 'recursive-readdir-sync';
 import PropertiesReader from 'properties-reader';
 import CookieDough from 'cookie-dough';
 import express from 'express';
-
 import createStore from './create';
 import { set } from './i18n';
 import ApiClient from './apiclient';
