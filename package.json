@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "6.0.9",
+  "version": "6.0.11",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -66,6 +66,7 @@
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-github2": "^0.1.10",
+    "passport-twitter": "^1.0.4",
     "path-to-regexp": "^1.7.0",
     "piping": "^0.3.0",
     "prop-types": "^15.5.10",

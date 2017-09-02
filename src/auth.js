@@ -44,7 +44,7 @@ const check = (store, cookie, origin = 'http://localhost:3000', setUser) => {
   };
 };
 
-const login = (store, cookie, origin = 'http://localhost:3000', setUser) => {
+const login = (store, cookie, origin = 'http://localhost:3000', authenticator, setUser) => {
   const connectedCheck = check(store, cookie, origin, setUser);
   return (nextState, replace, cb) => {
     connectedCheck(nextState, replace, () => {
@@ -58,10 +58,10 @@ const login = (store, cookie, origin = 'http://localhost:3000', setUser) => {
           path: '/'
         });
         if (__SERVER__) {
-          replace('/auth/github');
+          replace(`/auth/${authenticator}`);
           cb();
         } else {
-          location.href = `${origin}/auth/github`;
+          location.href = `${origin}/auth/${authenticator}`;
         }
       }
     });
