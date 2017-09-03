@@ -64,15 +64,21 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
-  evt.respondWith(
-    fromCache(evt.request, CACHE)
-      .then(response =>
-        response ||
-        fromServer(evt.request)
-      )
-      .then(
-        response => response,
-        () => fromCache(evt.request, FALLBACK)
-      )
-  );
+  if (evt.request.method === 'GET') {
+    evt.respondWith(
+      fromCache(evt.request, CACHE)
+        .then(response =>
+          response ||
+          fromServer(evt.request)
+        )
+        .then(
+          response => response,
+          () => fromCache(evt.request, FALLBACK)
+        )
+    );
+  } else {
+    evt.respondWith(
+      fetch(evt.request)
+    );
+  }
 });
