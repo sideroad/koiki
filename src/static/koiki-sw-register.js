@@ -1,6 +1,6 @@
 if (navigator.serviceWorker.controller) {
   console.log('[ServiceWorkerRegister] active service worker found, no need to register');
-} else {
+} else if (location.hostname !== 'localhost') {
   //Register the ServiceWorker
   navigator.serviceWorker.register('/koiki-sw.js', {
     scope: './'
