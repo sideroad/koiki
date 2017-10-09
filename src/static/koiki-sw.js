@@ -11,9 +11,17 @@ const CACHE_URLS = [
   /\.jpg$/,
 ];
 
-const FALLBACK_CONTENT_TYPES = [
-  'text/html'
-];
+const FALLBACK_URL = '/en/offline';
+
+function createOfflineCache() {
+  const request = new Request(FALLBACK_URL);
+  return fetch(FALLBACK_URL)
+    .then(response =>
+      caches.open(FALLBACK).then(cache =>
+        cache.put(request, response.clone())
+      )
+    );
+}
 
 function fromCache(request, target) {
   return caches.open(target).then(cache =>
@@ -21,6 +29,9 @@ function fromCache(request, target) {
   );
 }
 
+function fromFallback() {
+  return fromCache(new Request(FALLBACK_URL), FALLBACK);
+}
 
 function updateCache(request, response, target) {
   return caches.open(target).then(cache =>
@@ -38,12 +49,6 @@ function fromServer(request) {
       if (shouldCache) {
         promise = promise.then(() => updateCache(request, response, CACHE));
       }
-      const shouldCacheFallback = FALLBACK_CONTENT_TYPES.filter(target =>
-        (response.headers.get('Content-Type') || '').match(target) !== null
-      ).length !== 0;
-      if (shouldCacheFallback && response.status === 200) {
-        promise = promise.then(() => updateCache(request, response, FALLBACK));
-      }
       return promise.then(() => response);
     });
 }
@@ -51,11 +56,15 @@ function fromServer(request) {
 self.addEventListener('install', (evt) => {
   console.log('[ServiceWorker] installed.');
   evt.waitUntil(
-    caches.open(CACHE).then(cache =>
-      cache.addAll([
-        '/images/favicon.png',
-      ])
-    )
+    caches.open(CACHE)
+      .then(cache =>
+        cache.addAll([
+          '/images/favicon.png',
+        ])
+      )
+      .then(
+        () => createOfflineCache()
+      )
   );
 });
 
@@ -73,7 +82,7 @@ self.addEventListener('fetch', (evt) => {
         )
         .then(
           response => response,
-          () => fromCache(evt.request, FALLBACK)
+          err => evt.request.mode === 'navigate' ? fromFallback() : err
         )
     );
   } else {
