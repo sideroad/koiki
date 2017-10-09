@@ -39,8 +39,8 @@ function fromServer(request) {
         promise = promise.then(() => updateCache(request, response, CACHE));
       }
       const shouldCacheFallback = FALLBACK_CONTENT_TYPES.filter(target =>
-        target === response.headers.get('Content-Type')
-      );
+        (response.headers.get('Content-Type') || '').match(target) !== null
+      ).length !== 0;
       if (shouldCacheFallback && response.status === 200) {
         promise = promise.then(() => updateCache(request, response, FALLBACK));
       }
