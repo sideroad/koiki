@@ -18,14 +18,14 @@ function createOfflineCache() {
   return fetch(FALLBACK_URL)
     .then(response =>
       caches.open(FALLBACK).then(cache =>
-        cache.put(request, response.clone())
+        cache.put(request, response)
       )
     );
 }
 
 function fromCache(request, target) {
   return caches.open(target).then(cache =>
-    cache.match(request.clone())
+    cache.match(request)
   );
 }
 
@@ -35,12 +35,13 @@ function fromFallback() {
 
 function updateCache(request, response, target) {
   return caches.open(target).then(cache =>
-      cache.put(request.clone(), response.clone())
+      console.log('Update Cache', request, response) ||
+      cache.put(request, response)
   );
 }
 
 function fromServer(request) {
-  return fetch(request.clone())
+  return fetch(request)
     .then((response) => {
       let promise = Promise.resolve();
       const shouldCache = CACHE_URLS.filter(target =>
@@ -49,7 +50,7 @@ function fromServer(request) {
       if (shouldCache) {
         promise = promise.then(() => updateCache(request, response, CACHE));
       }
-      return promise.then(() => response);
+      return promise.then(() => console.log('From Server', request, response) || response.clone());
     });
 }
 
@@ -77,8 +78,9 @@ self.addEventListener('fetch', (evt) => {
     evt.respondWith(
       fromCache(evt.request, CACHE)
         .then(response =>
-          response ||
-          fromServer(evt.request)
+          response ?
+            console.log('From Cache', response) || response
+          : fromServer(evt.request)
         )
         .then(
           response => response,
