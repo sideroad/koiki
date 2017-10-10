@@ -30,10 +30,37 @@ const loadi18n = (dir, i18n) => {
   console.log(i18n);
 };
 
-export default function server({app, path, urls, origin, i18ndir, reducers, routes, handlers, statics, isDevelopment = false, manifest = {}}) {
+export default function server({
+  app,
+  path,
+  urls,
+  origin,
+  i18ndir,
+  reducers,
+  routes,
+  handlers,
+  statics,
+  isDevelopment = false,
+  manifest = {},
+  Offline,
+}) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
-
+  if (Offline) {
+    app.get('/offline', (req, res) => {
+      res.send('<!doctype html>\n' +
+        ReactDOM.renderToString(
+          <Html
+            assets={webpackIsomorphicTools.assets()}
+            component={<Offline />}
+            store={{getState: () => {}}}
+            statics={statics}
+            enableScript={false}
+          />
+        )
+      );
+    });
+  }
   app.use('/', express.static(`${__dirname}/static`));
   app.get('/manifest.json', (req, res) => {
     const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';

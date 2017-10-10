@@ -30,6 +30,7 @@ function fromCache(request, target) {
 }
 
 function fromFallback() {
+  console.log('From fallback');
   return fromCache(new Request(FALLBACK_URL), FALLBACK);
 }
 

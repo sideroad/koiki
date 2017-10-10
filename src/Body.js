@@ -7,7 +7,8 @@ export default class Body extends Component {
     content: PropTypes.string,
     store: PropTypes.object,
     assets: PropTypes.object,
-    fetcher: PropTypes.object
+    fetcher: PropTypes.object,
+    enableScript: PropTypes.bool,
   };
 
   render() {
@@ -15,7 +16,8 @@ export default class Body extends Component {
       content,
       store,
       assets,
-      fetcher
+      fetcher,
+      enableScript,
     } = this.props;
     // const styles = require('../css/customize.less');
     return (
@@ -23,7 +25,11 @@ export default class Body extends Component {
         <div id="content" dangerouslySetInnerHTML={{__html: content}}/>
         <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} charSet="UTF-8"/>
         <script dangerouslySetInnerHTML={{__html: `window.__fetcher=${serialize(fetcher)};`}} charSet="UTF-8"/>
-        <script src={assets.javascript.main} charSet="UTF-8"/>
+        {
+          enableScript ?
+            <script src={assets.javascript.main} charSet="UTF-8"/>
+          : ''
+        }
       </body>
     );
   }

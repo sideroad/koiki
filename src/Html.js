@@ -19,11 +19,12 @@ export default class Html extends Component {
     component: PropTypes.node,
     store: PropTypes.object,
     statics: PropTypes.object,
-    fetcher: PropTypes.object
+    fetcher: PropTypes.object,
+    enableScript: PropTypes.bool,
   }
 
   render() {
-    const {assets, component, store, statics, fetcher} = this.props;
+    const {assets, component, store, statics, fetcher, enableScript = true} = this.props;
     const content = component ? ReactDOM.renderToString(component) : '';
     const head = Helmet.rewind();
 
@@ -43,15 +44,15 @@ export default class Html extends Component {
           )}
           {Object.keys(statics || {}).map((tag) =>
             tag === 'link' ? statics[tag].map((attributes) => <link key={`${attributes.rel}-${attributes.href}`} {...attributes} />) :
-            tag === 'script' ? statics[tag].map((attributes) => <script key={attributes.src} {...attributes} />) : ''
+            tag === 'script' && enableScript ? statics[tag].map((attributes) => <script key={attributes.src} {...attributes} />) : ''
           )}
           {head.base.toComponent()}
           {head.title.toComponent()}
           {head.meta.toComponent()}
           {head.link.toComponent()}
-          {head.script.toComponent()}
+          {enableScript ? head.script.toComponent() : null}
         </head>
-        <Body assets={assets} content={content} store={store} fetcher={fetcher} />
+        <Body assets={assets} content={content} store={store} fetcher={fetcher} enableScript={enableScript}/>
       </html>
     );
   }
