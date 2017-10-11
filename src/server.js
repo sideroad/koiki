@@ -43,6 +43,7 @@ export default function server({
   statics,
   isDevelopment = false,
   manifest = {},
+  colors = {},
 }) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
@@ -52,7 +53,7 @@ export default function server({
         ReactDOM.renderToString(
           <Html
             assets={webpackIsomorphicTools.assets()}
-            component={<Offline />}
+            component={<Offline colors={colors} />}
             store={{getState: () => {}}}
             statics={statics}
             enableScript={false}
@@ -75,7 +76,7 @@ export default function server({
       theme_color: 'transparent',
       description: '',
       orientation: 'any',
-      background_color: 'transparent',
+      background_color: colors.background || 'transparent',
       related_applications: [],
       prefer_related_applications: false,
       icons: ['48', '72', '96', '144', '168', '192', '256', '384', '512'].map(size => ({
