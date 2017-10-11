@@ -11,7 +11,7 @@ const CACHE_URLS = [
   /\.jpg$/,
 ];
 
-const FALLBACK_URL = '/en/offline';
+const FALLBACK_URL = '/offline';
 
 function createOfflineCache() {
   const request = new Request(FALLBACK_URL);
@@ -25,7 +25,7 @@ function createOfflineCache() {
 
 function fromCache(request, target) {
   return caches.open(target).then(cache =>
-    cache.match(request)
+    cache.match(request.clone())
   );
 }
 
@@ -37,12 +37,12 @@ function fromFallback() {
 function updateCache(request, response, target) {
   return caches.open(target).then(cache =>
       console.log('Update Cache', request, response) ||
-      cache.put(request, response)
+      cache.put(request.clone(), response.clone())
   );
 }
 
 function fromServer(request) {
-  return fetch(request)
+  return fetch(request.clone())
     .then((response) => {
       let promise = Promise.resolve();
       const shouldCache = CACHE_URLS.filter(target =>
@@ -51,7 +51,7 @@ function fromServer(request) {
       if (shouldCache) {
         promise = promise.then(() => updateCache(request, response, CACHE));
       }
-      return promise.then(() => console.log('From Server', request, response) || response.clone());
+      return promise.then(() => console.log('From Server', request, response) || response);
     });
 }
 
@@ -62,6 +62,9 @@ self.addEventListener('install', (evt) => {
       .then(cache =>
         cache.addAll([
           '/images/favicon.png',
+          '/css/offline.css',
+          '/pulltorefresh.min.js',
+          '/pulltorefresh-init.js'
         ])
       )
       .then(

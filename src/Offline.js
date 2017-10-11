@@ -3,6 +3,8 @@ import React from 'react';
 const Offline = () =>
   <div className="root">
     <link rel="stylesheet" type="text/css" href="/css/offline.css" />
+    <script src="/pulltorefresh.min.js"></script>
+    <script src="/pulltorefresh-init.js"></script>
     <div className="container">
       <div className="logo">
         <img
@@ -15,12 +17,18 @@ const Offline = () =>
         Network Connection Failed
       </div>
       <div className="button">
-        <button
+        <a
           className="reload"
-          onClick={() => location.reload()}
+          href=""
         >
           Reload
-        </button>
+        </a>
+        <div
+          className="pull-to-refresh"
+          href=""
+        >
+          Pull down to refresh
+        </div>
       </div>
     </div>
   </div>;
