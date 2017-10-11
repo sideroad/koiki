@@ -16,6 +16,7 @@ import stringify from './stringify';
 import createRouterOpts from './createRouterOpts';
 import Html from './Html';
 import App from './App';
+import Offline from './Offline';
 
 const loadi18n = (dir, i18n) => {
   const path = require('path');
@@ -42,7 +43,6 @@ export default function server({
   statics,
   isDevelopment = false,
   manifest = {},
-  Offline,
 }) {
   const i18n = {};
   loadi18n(i18ndir, i18n);
