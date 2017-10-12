@@ -4,3 +4,4 @@ static/dist
 npm-debug.log
 .DS_Store
 lib
+!bin/lib

@@ -1,3 +1,7 @@
+/* global CACHE_TARGETS */
+// CACHE_TARGETS will be assigned by build process
+// CACHE_TARGETS = [];
+
 const CACHE = 'koiki';
 const FALLBACK = 'koiki-fallback';
 
@@ -60,12 +64,8 @@ self.addEventListener('install', (evt) => {
   evt.waitUntil(
     caches.open(CACHE)
       .then(cache =>
-        cache.addAll([
-          '/images/favicon.png',
-          '/css/offline.css',
-          '/pulltorefresh.min.js',
-          '/pulltorefresh-init.js'
-        ])
+        // eslint-disable-next-line
+        cache.addAll(CACHE_TARGETS)
       )
       .then(
         () => createOfflineCache()

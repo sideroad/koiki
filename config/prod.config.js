@@ -1,20 +1,19 @@
+const _ = require('lodash');
+const fs = require('fs-extra');
+const path = require('path');
+const webpack = require('webpack');
+const CleanPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const strip = require('strip-loader');
+const relativeAssetsPath = 'static/dist';
+const cwd = process.cwd();
+const assetsPath = path.join(cwd, relativeAssetsPath);
+const rcPath = path.join(cwd, '.koikirc');
+const rc = fs.existsSync(rcPath) ? fs.readJsonSync(rcPath) : {};
+const env = require('../bin/lib/env');
 
-var _ = require('lodash');
-var fs = require('fs-extra');
-var path = require('path');
-var webpack = require('webpack');
-var CleanPlugin = require('clean-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var strip = require('strip-loader');
-var relativeAssetsPath = 'static/dist';
-var cwd = process.cwd();
-var assetsPath = path.join(cwd, relativeAssetsPath);
-var rcPath = path.join(cwd, '.koikirc');
-var rc = fs.existsSync(rcPath) ? fs.readJsonSync(rcPath) : {};
-var env = require('../bin/lib/env');
-
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
 module.exports = _.merge({
   devtool: 'source-map',
@@ -95,7 +94,7 @@ module.exports = _.merge({
           mimetype: 'application/octet-stream'
         }
       }]},
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, use: "file-loader" },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, use: 'file-loader' },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, use: [{
         loader: 'url-loader',
         options: {
