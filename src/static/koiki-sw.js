@@ -5,16 +5,6 @@
 const CACHE = 'koiki';
 const FALLBACK = 'koiki-fallback';
 
-const CACHE_URLS = [
-  /\.js$/,
-  /\.css$/,
-  /\.woff$/,
-  /\.woff2$/,
-  /\.tff$/,
-  /\.png$/,
-  /\.jpg$/,
-];
-
 const FALLBACK_URL = '/offline';
 
 function createOfflineCache() {
@@ -38,25 +28,12 @@ function fromFallback() {
   return fromCache(new Request(FALLBACK_URL), FALLBACK);
 }
 
-function updateCache(request, response, target) {
-  return caches.open(target).then(cache =>
-      console.log('Update Cache', request, response) ||
-      cache.put(request.clone(), response.clone())
-  );
-}
-
 function fromServer(request) {
   return fetch(request.clone())
-    .then((response) => {
-      let promise = Promise.resolve();
-      const shouldCache = CACHE_URLS.filter(target =>
-        target.test(request.url)
-      ).length !== 0;
-      if (shouldCache) {
-        promise = promise.then(() => updateCache(request, response, CACHE));
-      }
-      return promise.then(() => console.log('From Server', request, response) || response);
-    });
+    .then(response =>
+      console.log('From Server', request, response) ||
+      response
+    );
 }
 
 self.addEventListener('install', (evt) => {
