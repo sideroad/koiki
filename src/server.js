@@ -65,7 +65,10 @@ export default function server({
   }
   const koikiSw = fs.readFileSync(require('path').resolve(__dirname, './static/koiki-sw.js'));
   const cacheTargets = fs.readJsonSync(require('path').resolve(process.cwd(), 'cache-targets.json'));
-  app.use('/koiki-sw.js', (req, res) => res.send(`const CACHE_TARGETS = ${JSON.stringify(cacheTargets)};${koikiSw}`));
+  app.use('/koiki-sw.js', (req, res) => {
+    res.set('Content-Type', 'text/javascript');
+    res.send(`const CACHE_TARGETS = ${JSON.stringify(cacheTargets)};${koikiSw}`);
+  });
   app.use('/', express.static(`${__dirname}/static`));
   app.get('/manifest.json', (req, res) => {
     const lang = String.trim((req.headers['accept-language'] || '').split(',')[0].split('-')[0].split('_')[0]) || 'en';

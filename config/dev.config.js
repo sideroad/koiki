@@ -1,20 +1,19 @@
 // Webpack config for development
-var _ = require('lodash');
-var fs = require('fs-extra');
-var path = require('path');
-var webpack = require('webpack');
-var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
-var cwd = process.cwd();
-var assetsPath = path.resolve(cwd, 'static/dist');
-var host = (process.env.HOST || 'localhost');
-var port = parseInt(process.env.PORT) + 1 || 3001;
-var rcPath = path.join(cwd, '.koikirc');
-var rc = fs.existsSync(rcPath) ? fs.readJsonSync(rcPath) : {};
-var env = require('../bin/lib/env');
+const _ = require('lodash');
+const fs = require('fs-extra');
+const path = require('path');
+const webpack = require('webpack');
+const cwd = process.cwd();
+const assetsPath = path.resolve(cwd, 'static/dist');
+const host = (process.env.HOST || 'localhost');
+const port = parseInt(process.env.PORT, 10) + 1 || 3001;
+const rcPath = path.join(cwd, '.koikirc');
+const rc = fs.existsSync(rcPath) ? fs.readJsonSync(rcPath) : {};
+const env = require('../bin/lib/env');
 
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
 module.exports = _.merge({
   devtool: 'inline-source-map',
@@ -110,6 +109,7 @@ module.exports = _.merge({
     'koiki-dev': '{}',
     express: '{}',
     passporter: '{}',
-    passport: '{}'
+    passport: '{}',
+    'fs-extra': '{}',
   }
 }, rc.webpack && rc.webpack.dev ? rc.webpack.dev : {});

@@ -136,6 +136,7 @@ module.exports = _.merge({
     fs: '{}',
     express: '{}',
     passporter: '{}',
-    passport: '{}'
+    passport: '{}',
+    'fs-extra': '{}',
   }
 }, rc.webpack && rc.webpack.prod ? rc.webpack.prod : {});
