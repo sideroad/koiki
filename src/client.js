@@ -15,8 +15,16 @@ import Fetcher from './fetcher';
 import App from './App';
 import CookieDough from 'cookie-dough';
 import createRouterOpts from './createRouterOpts';
+import ws from './ws';
 
-export default function client({urls, reducers, routes, dest = document.getElementById('content'), isDevelopment = false}) {
+export default function client({
+  urls,
+  reducers,
+  routes,
+  dest = document.getElementById('content'),
+  isDevelopment = false,
+  wsUrl,
+}) {
   const createScrollHistory = useScroll(createBrowserHistory);
 
   const history = useRouterHistory(createScrollHistory)(createRouterOpts({
@@ -35,6 +43,13 @@ export default function client({urls, reducers, routes, dest = document.getEleme
     serialized: window.__fetcher,
     type: 'client'
   });
+  if (wsUrl) {
+    ws({
+      dispatch: store.dispatch,
+      urls,
+      wsUrl,
+    });
+  }
   const cookie = CookieDough();
 
   const component = (
