@@ -95,7 +95,7 @@ export default function server({
   });
 
   app.get('*', (req, res, next) => {
-    if ( !isDevelopment && req.headers['x-forwarded-proto'] !== 'https') {
+    if ( !isDevelopment && req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
       res.redirect(origin + req.url);
     } else {
       next();

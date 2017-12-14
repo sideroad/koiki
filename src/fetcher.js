@@ -15,7 +15,8 @@ const exec = ({
     headers,
     after = (_values, res) => new Promise(resolve => resolve(res.body)),
     next,
-    cache
+    cache,
+    useQuery,
   }) => {
   dispatch(start(fetch.values));
   return client
@@ -27,6 +28,7 @@ const exec = ({
             credentials,
             headers,
             cache,
+            useQuery,
           })
           .then(
             (res) => {
@@ -66,6 +68,7 @@ const getExecOptions = (applyWith, {options, values, urls, dispatch, client, res
   mode: options.mode !== undefined ? options.mode : urls[resource][action].mode,
   credentials: options.credentials !== undefined ? options.credentials : urls[resource][action].credentials,
   headers: options.headers !== undefined ? options.headers : urls[resource][action].headers,
+  useQuery: options.useQuery !== undefined ? options.useQuery : urls[resource][action].useQuery,
   values,
   start: () => ({
     values,

@@ -30,7 +30,7 @@ const getHeader = (_headers, defaultHeaders, mode, credentials) => {
   };
 };
 
-const postHeader = (values, _headers, defaultHeaders, mode, credentials) => {
+const postHeader = (values, _headers, defaultHeaders, mode, credentials, useQuery) => {
   const headers = Object.assign({
     'Content-Type': 'application/json',
     ...defaultHeaders
@@ -39,13 +39,13 @@ const postHeader = (values, _headers, defaultHeaders, mode, credentials) => {
   return {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify( values ),
+    body: !useQuery ? JSON.stringify( values ) : '',
     mode,
     credentials
   };
 };
 
-const patchHeader = (values, _headers, defaultHeaders, mode, credentials) => {
+const patchHeader = (values, _headers, defaultHeaders, mode, credentials, useQuery) => {
   const headers = Object.assign({
     'Content-Type': 'application/json',
     ...defaultHeaders
@@ -54,14 +54,14 @@ const patchHeader = (values, _headers, defaultHeaders, mode, credentials) => {
   return {
     method: 'PATCH',
     headers: headers,
-    body: JSON.stringify( values ),
+    body: !useQuery ? JSON.stringify( values ) : '',
     mode,
     credentials
   };
 };
 
 
-const deleteHeader = (values, _headers, defaultHeaders, mode, credentials) => {
+const deleteHeader = (values, _headers, defaultHeaders, mode, credentials, useQuery) => {
   const headers = Object.assign({
     'Content-Type': 'application/json',
     ...defaultHeaders
@@ -70,7 +70,7 @@ const deleteHeader = (values, _headers, defaultHeaders, mode, credentials) => {
   return {
     method: 'DELETE',
     headers: headers,
-    body: JSON.stringify( values ),
+    body: !useQuery ? JSON.stringify( values ) : '',
     mode,
     credentials
   };
@@ -79,14 +79,23 @@ const deleteHeader = (values, _headers, defaultHeaders, mode, credentials) => {
 export default class ApiClient {
   constructor(defaultHeaders = {}, logger = (...args) => console.log(...args)) {
     const cached = {};
-    this.fetchJSON = ({url = '', method = 'GET', values = {}, headers, mode, credentials, cache }) => {
+    this.fetchJSON = ({
+      url = '',
+      method = 'GET',
+      values = {},
+      headers,
+      mode,
+      credentials,
+      cache,
+      useQuery,
+    }) => {
 
       if ( !url ) {
         throw new Error('URL does not specified');
       }
 
       const _values = Object.assign({}, values);
-      const _url = normalize(url, _values) + (method === 'GET' ? '?' + string(_values) : '');
+      const _url = normalize(url, _values) + (useQuery || method === 'GET' ? '?' + string(_values) : '');
 
       // return from cache
       const hashed = hash(_url);
@@ -102,9 +111,9 @@ export default class ApiClient {
         logger('## fetch ', _url, method, _values);
 
         fetch( _url, (method === 'GET' ? getHeader( headers, defaultHeaders, mode, credentials ) :
-                     method === 'POST' ? postHeader( _values, headers, defaultHeaders, mode, credentials ) :
-                     method === 'PATCH' ? patchHeader( _values, headers, defaultHeaders, mode, credentials ) :
-                     method === 'DELETE' ? deleteHeader( _values, headers, defaultHeaders, mode, credentials ) : ''))
+                     method === 'POST' ? postHeader( _values, headers, defaultHeaders, mode, credentials, useQuery ) :
+                     method === 'PATCH' ? patchHeader( _values, headers, defaultHeaders, mode, credentials, useQuery ) :
+                     method === 'DELETE' ? deleteHeader( _values, headers, defaultHeaders, mode, credentials, useQuery ) : ''))
                .then(res => {
                  if ( !res.ok ) {
                    res.json().then((json) => {
