@@ -2,7 +2,6 @@ const _ = require('lodash');
 const fs = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
-const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const strip = require('strip-loader');
 const relativeAssetsPath = 'static/dist';
@@ -113,7 +112,6 @@ module.exports = _.merge({
     extensions: ['.json', '.js', '.jsx'],
   },
   plugins: [
-    new CleanPlugin([assetsPath], { root: cwd }),
 
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin({
