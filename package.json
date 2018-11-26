@@ -1,6 +1,6 @@
 {
   "name": "koiki",
-  "version": "6.3.3",
+  "version": "6.3.5",
   "description": "Koiki",
   "repository": {
     "type": "git",
@@ -44,7 +44,6 @@
     "babel-register": "^6.14.0",
     "babel-runtime": "^6.3.19",
     "buble-loader": "^0.4.1",
-    "clean-webpack-plugin": "^0.1.4",
     "cookie-dough": "^0.1.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.0",
